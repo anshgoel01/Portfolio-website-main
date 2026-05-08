@@ -6,16 +6,15 @@ import "react-calendar-heatmap/dist/styles.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Sector } from "recharts";
 
 const DEFAULT_RATING_DATA = [
-  { date: 'Jan', rating: 1400 },
-  { date: 'Feb', rating: 1450 },
-  { date: 'Mar', rating: 1350 },
-  { date: 'Apr', rating: 1580 },
-  { date: 'May', rating: 1650 },
-  { date: 'Jun', rating: 1575 },
-  { date: 'Jul', rating: 1694 },
-  { date: 'Aug', rating: 1871 },
-  { date: 'Sep', rating: 1939 },
-  { date: 'Oct', rating: 1931 },
+  { date: 'Jan', rating: 1416 },
+  { date: 'Feb', rating: 1416 },
+  { date: 'Mar', rating: 1416 },
+  { date: 'Apr', rating: 1416 },
+  { date: 'May', rating: 1416 },
+  { date: 'Jun', rating: 1416 },
+  { date: 'Jul', rating: 1416 },
+  { date: 'Aug', rating: 1416 },
+  { date: 'Sep', rating: 1416 },
 ];
 
 interface LeetCodeStats {
@@ -71,6 +70,7 @@ const CodingDashboard = () => {
   const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'anshgoel01';
   const CODECHEF_USER = (import.meta as any).env?.VITE_CODECHEF_USERNAME || 'anshgoel01';
   const CODEFORCES_USER = (import.meta as any).env?.VITE_CODEFORCES_USERNAME || 'anshgoel01';
+  const CODOLIO_USER = 'anshgoel_01';
 
   useEffect(() => {
     fetch('/codolio-stats.json')
@@ -585,31 +585,31 @@ const CodingDashboard = () => {
     img?: string;
     color: string;
   }[] = [
-    {
-      title: "Total Questions Solved",
-      value: totalSolvedDisplayed,
-      Icon: Code2,
-      color: "text-blue-500 dark:text-blue-400",
-    },
-    {
-      title: "Total Active Days",
-      value: codolioStats?.totalActiveDays ?? 0,
-      Icon: Calendar,
-      color: "text-yellow-500 dark:text-yellow-400",
-    },
-    {
-      title: "Learning Progress",
-      value: "Active",
-      Icon: Target,
-      color: "text-orange-500 dark:text-orange-400",
-    },
-    {
-      title: "Problem Solving",
-      value: "Daily",
-      Icon: Flame,
-      color: "text-green-500 dark:text-green-400",
-    },
-  ];
+      {
+        title: "Total Questions Solved",
+        value: totalSolvedDisplayed,
+        Icon: Code2,
+        color: "text-blue-500 dark:text-blue-400",
+      },
+      {
+        title: "Total Active Days",
+        value: codolioStats?.totalActiveDays ?? 0,
+        Icon: Calendar,
+        color: "text-yellow-500 dark:text-yellow-400",
+      },
+      {
+        title: "Learning Progress",
+        value: "Active",
+        Icon: Target,
+        color: "text-orange-500 dark:text-orange-400",
+      },
+      {
+        title: "Problem Solving",
+        value: "Daily",
+        Icon: Flame,
+        color: "text-green-500 dark:text-green-400",
+      },
+    ];
 
   if (loading) {
     return (

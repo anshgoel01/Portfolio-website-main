@@ -21,7 +21,7 @@ Toggle Sidebar
 Company Wise Kit 🌟
 Login
 Anshuman Goel
-@anshgoel01
+@anshgoel_01
 I'm Anshuman Goel, a 2nd-year CS student (7.3 CGPA). I excel in high-performance software engineering and AI development.
 India
 Thapar Institute of Engineering and Technology

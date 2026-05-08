@@ -6,8 +6,8 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const OUTPUT_FILE = path.join(__dirname, "../public/codolio-stats.json");
-const PROFILE_URL = process.env.CODOLIO_PROFILE_URL || "https://codolio.com/profile/anshgoel01";
-const EXPECTED_USERNAME = (process.env.CODOLIO_EXPECTED_USERNAME || "anshgoel01").toLowerCase();
+const PROFILE_URL = process.env.CODOLIO_PROFILE_URL || "https://codolio.com/profile/anshgoel_01";
+const EXPECTED_USERNAME = (process.env.CODOLIO_EXPECTED_USERNAME || "anshgoel_01").toLowerCase();
 
 const log = (...args) => console.log("[codolio]", ...args);
 
