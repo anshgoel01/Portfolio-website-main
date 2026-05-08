@@ -66,7 +66,7 @@ const Contact = () => {
                 Drop me an email and I'll get back to you within 24 hours to discuss your ideas and requirements.
               </p>
             </div>
-          <a href="https://tally.so/r/mYLgYq" target="_blank" rel="noopener noreferrer">
+          <a href="https://tally.so/r/yPjMex" target="_blank" rel="noopener noreferrer">
             <Button size="lg" className="rounded-full gap-2 px-8 py-6 mt-4   text-base font-medium">
               Get in Touch
               <ArrowRight className="w-5 h-5" />

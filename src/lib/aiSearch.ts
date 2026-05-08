@@ -6,7 +6,7 @@ Education: Pre Final Year Student, CSE, Thapar Institute (CGPA: 7.3)
 Email: anshg112005@gmail.com
 LinkedIn: linkedin.com/in/anshumangoel
 GitHub: github.com/anshgoel01
-Portfolio: anshuman.codes
+Portfolio: anshumangoel.vercel.app
 PROFESSIONAL SUMMARY:
 Computer Science student with experience in high-performance software engineering and applied AI. Focused on building scalable, secure, and intelligent systems.
 WORK EXPERIENCE:
@@ -61,7 +61,7 @@ const fallbackResponses: Record<string, string> = {
   "achievements": "I won the Innovation Award at the Cyber AI Hackathon 2025 and hold leadership roles as Head of Logistics in Mudra and MUN societies at Thapar Institute.",
   "leadership": "As Head of Logistics for Mudra and MUN societies, I've managed events for 1000+ attendees and optimized resource allocation, reducing costs by 20%.",
   "availability": "I'm open to SDE and AI/ML internship or full-time opportunities where I can apply my skills in software engineering and AI.",
-  "text": "You can reach me through my website (anshuman.codes), LinkedIn (linkedin.com/in/anshumangoel), or email (anshg112005@gmail.com).",
+  "text": "You can reach me through my website (anshumangoel.vercel.app), LinkedIn (linkedin.com/in/anshumangoel), or email (anshg112005@gmail.com).",
   "contact information": "Feel free to reach out via email at anshg112005@gmail.com or connect with me on LinkedIn at linkedin.com/in/anshumangoel.",
 };
 

@@ -2,8 +2,8 @@
 
 #  Anshuman Goel | Portfolio
 
-<a href="https://anshuman.codes">
-<img src="https://img.shields.io/badge/Live%20Portfolio-anshuman.codes-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
+<a href="https://anshumangoel.vercel.app">
+<img src="https://img.shields.io/badge/Live%20Portfolio-anshumangoel.vercel.app-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
 </a>
 
 ### **AI-powered navigation. Performance-first UI. A portfolio that feels like a product.**
@@ -234,7 +234,7 @@ Common update points:
 ## 📬 Contact
 
 **Anshuman Goel**
-- Portfolio: https://anshuman.codes
+- Portfolio: https://anshumangoel.vercel.app
 - LinkedIn: https://www.linkedin.com/in/anshumangoel/
 - GitHub: https://github.com/anshgoel01
 - Email: anshg112005@gmail.com

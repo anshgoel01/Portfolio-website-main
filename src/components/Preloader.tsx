@@ -65,7 +65,7 @@ export default function Preloader({
       )}
     >
       <img
-        src="/preloader.svg"
+        src="/logo.png"
         alt=""
         className={cn(
           "h-auto w-[220px] select-none",

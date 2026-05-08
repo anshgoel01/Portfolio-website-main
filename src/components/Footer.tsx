@@ -14,7 +14,7 @@ const Footer = () => {
         <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
-      
+
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Left Column */}
@@ -41,7 +41,7 @@ const Footer = () => {
                 <Github className="w-5 h-5" />
               </a>
             </div>
-            
+
           </div>
 
           {/* Middle Column - Navigation */}
@@ -104,16 +104,9 @@ const Footer = () => {
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 Location: Patiala, India
               </span>
-              <span className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                CGPA: 7.3
-              </span>
             </div>
-            <p className="text-sm text-gray-400">
-              Made with ❤️ by Anshuman
-            </p>
           </div>
-          
+
           {/* Command Palette Hint */}
           <div className="mt-6 hidden sm:flex justify-center">
             <div className="inline-flex items-center gap-2 text-xs text-gray-400 bg-white/5 px-4 py-2 rounded-full border border-white/10">
