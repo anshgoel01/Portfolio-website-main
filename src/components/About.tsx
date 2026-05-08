@@ -2,7 +2,7 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const About = () => {
   const { ref: aboutRef, isVisible: aboutVisible } = useScrollAnimation();
-  
+
   const skills = {
     fullstack: [
       "React",
@@ -52,17 +52,17 @@ const About = () => {
             </div>
 
             <div className="space-y-6 text-lg text-muted-foreground">
-      <p>
-        I'm a <span className="font-bold text-black dark:text-white">Pre Final Year Student</span> at Thapar Institute of Engineering & Technology, maintaining a <span className="font-bold text-black dark:text-white">CGPA of 7.3</span>. I've gained hands-on experience as a Software Engineering Intern at SafeSpace, where I developed advanced multimodal stress detection systems.
-      </p>
+              <p>
+                I'm a <span className="font-bold text-black dark:text-white">Pre Final Year Student</span> at Thapar Institute of Engineering & Technology. I've gained hands-on experience as a Software Engineering Intern at SafeSpace, where I developed advanced multimodal stress detection systems.
+              </p>
 
-      <p>
-        My work lies at the intersection of high-performance software engineering and applied AI. I've built distributed in-memory caches achieving 680k+ ops/sec and full-stack platforms like VerifyHub that automate verification for thousands of users. I am passionate about building scalable, secure, and intelligent systems.
-      </p>
+              <p>
+                My work lies at the intersection of high-performance software engineering and applied AI. I've built distributed in-memory caches achieving 680k+ ops/sec and full-stack platforms like VerifyHub that automate verification for thousands of users. I am passionate about building scalable, secure, and intelligent systems.
+              </p>
 
-      <p>
-        What truly drives me is solving real-world problems with measurable impact. Whether it's optimizing distributed systems, architecting secure platforms, or building AI models that enhance human well-being, I approach every challenge with precision, curiosity, and a strong focus on delivering results that matter.
-      </p>
+              <p>
+                What truly drives me is solving real-world problems with measurable impact. Whether it's optimizing distributed systems, architecting secure platforms, or building AI models that enhance human well-being, I approach every challenge with precision, curiosity, and a strong focus on delivering results that matter.
+              </p>
             </div>
 
           </div>

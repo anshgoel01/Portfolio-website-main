@@ -6,7 +6,6 @@ import About from "@/components/About";
 import Timeline from "../components/Timeline";
 import Projects from "@/components/Projects";
 import CodingDashboard from "@/components/CodingDashboard";
-import FAQ from "@/components/FAQ";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import MobileFAB from "@/components/MobileFAB";
@@ -55,7 +54,6 @@ const Index = () => {
         <Timeline />
         <Projects />
         <CodingDashboard />
-        <FAQ />
         <Contact />
         <Footer />
         <MobileFAB />
@@ -81,7 +79,6 @@ const Index = () => {
         <Timeline />
         <Projects />
         <CodingDashboard />
-        <FAQ />
         <Contact />
       </main>
 {/* FIXED FOOTER */}

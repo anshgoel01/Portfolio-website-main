@@ -51,7 +51,7 @@ const Hero = () => {
     [blobA, blobB, blobC, blobD].forEach((r) => { if (r.current) r.current.style.transform = ''; });
     return;
   }, [isMobile]);
-  
+
   return (
     <section ref={heroRef} className="min-h-[85vh] bg-background relative overflow-hidden pt-24 pb-16">
       {/* Decorative floating elements */}
@@ -109,8 +109,8 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="rounded-full gap-2 px-8 py-6 text-base font-medium"
               onClick={() => {
                 const projectsSection = document.getElementById('projects');
@@ -145,7 +145,7 @@ const Hero = () => {
                 className="w-full h-[420px] sm:h-[500px] md:h-[550px] object-cover rounded-2xl transition-transform duration-500 scale-150 sm:scale-100 sm:group-hover:scale-105"
               />
               {/* Vignette effect overlay - dark mode only */}
-              <div 
+              <div
                 className="absolute inset-0 rounded-2xl pointer-events-none hidden dark:block"
                 style={{
                   background: 'radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.2) 70%, rgba(0,0,0,0.5) 100%)'
@@ -159,16 +159,15 @@ const Hero = () => {
                 style={{
                   background: 'radial-gradient(circle at 62% 34%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.35) 8%, rgba(255,255,255,0.05) 18%, transparent 28%)',
                   mixBlendMode: 'screen',
-                  opacity: 0.22 
+                  opacity: 0.22
                 }}
               />
             </div>
 
             {/* bottom overlay */}
-            <div className="absolute bottom-4 left-4 right-4  rounded-2xl p-6 text-white  border-white/10 ">
+            <div className="absolute bottom-4 left-4 right-4 rounded-2xl p-6 text-white border-white/10 ">
               <p className="text-s uppercase tracking-wider mb-2 text-white/80">Available for work</p>
               <p className="text-lg font-semibold">Let's collaborate on a project!</p>
-                <p className="text-xs sm:text-xs text-white/60 mt-3">|| ॐ नमः शिवाय ||</p>
             </div>
           </div>
         </div>

@@ -60,9 +60,6 @@ const Footer = () => {
               <a href="#contact" className="block text-gray-400 hover:text-white transition-colors">
                 Contact
               </a>
-              <a href="#faq" className="block text-gray-400 hover:text-white transition-colors">
-                FAQs
-              </a>
             </nav>
           </div>
 
@@ -114,7 +111,6 @@ const Footer = () => {
             </div>
             <p className="text-sm text-gray-400">
               Made with ❤️ by Anshuman
-              <span className="block text-xs text-white/40 mt-1 ml-6">|| ॐ नमः शिवाय ||</span>
             </p>
           </div>
           

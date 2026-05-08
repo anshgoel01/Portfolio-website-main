@@ -134,11 +134,11 @@ const Timeline = () => {
         {/* Desktop Timeline - Horizontal */}
         <div className="hidden lg:block relative">
           {/* Background Line */}
-          <div className="absolute top-8 left-0 right-0 h-0.5 bg-border" />
+          <div className="absolute top-10 left-0 right-0 h-0.5 bg-border" />
           
           {/* Animated Progress Line */}
           <div
-            className="absolute top-8 left-0 h-0.5 bg-gradient-to-r from-accent via-primary to-accent transition-all duration-300 ease-out"
+            className="absolute top-10 left-0 h-0.5 bg-gradient-to-r from-accent via-primary to-accent transition-all duration-300 ease-out"
             style={{ width: `${(visibleItems / timelineData.length) * 100}%` }}
           />
 
@@ -147,14 +147,14 @@ const Timeline = () => {
             {timelineData.map((item, index) => (
               <div
                 key={index}
-                className={`relative transition-all duration-700 ${
+                className={`relative flex flex-col transition-all duration-700 ${
                   index < visibleItems ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
                 }`}
               >
-                {/* Dot */}
-                <div className="relative flex justify-center mb-8">
+                {/* Dot Container - Line passes through center */}
+                <div className="relative h-20 flex items-center justify-center">
                   <div
-                    className={`w-4 h-4 rounded-full border-2 transition-all duration-500 ${
+                    className={`w-4 h-4 rounded-full border-2 z-10 transition-all duration-500 ${
                       index < visibleItems
                         ? "bg-accent border-accent shadow-lg shadow-accent/50 scale-125"
                         : "bg-background border-border"
@@ -163,7 +163,7 @@ const Timeline = () => {
                 </div>
 
                 {/* Content Card */}
-                <div className="glass-card p-5 rounded-xl group cursor-default border border-black/60 dark:border-gray-400 transition-transform duration-200 ease-out transform hover:-translate-y-1 hover:shadow-lg bg-white/5 dark:bg-white/3 backdrop-blur-sm">
+                <div className="glass-card flex-1 p-5 rounded-xl group cursor-default border border-black/60 dark:border-gray-400 transition-transform duration-200 ease-out transform hover:-translate-y-1 hover:shadow-lg bg-white/5 dark:bg-white/3 backdrop-blur-sm flex flex-col">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-sm text-muted-foreground">{item.period || item.date}</p>

@@ -43,7 +43,7 @@ const Navbar = () => {
       setScrollProgress(progress);
       setIsScrolled(scrollTop > 20);
 
-      const sections = ["hero", "about", "timeline", "projects", "faq"];
+      const sections = ["hero", "about", "timeline", "projects"];
       const scrollPosition = scrollTop + 100;
       for (const sectionId of sections) {
         const element =
@@ -101,7 +101,6 @@ const Navbar = () => {
     { name: "About", path: "#about", section: "about" },
     { name: "Timeline", path: "#timeline", section: "timeline" },
     { name: "Projects", path: "#projects", section: "projects" },
-    { name: "FAQ", path: "#faq", section: "faq" },
   ];
 
   const closeMenu = useCallback(() => setMobileMenuOpen(false), []);
