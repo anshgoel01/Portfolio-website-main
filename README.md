@@ -1,9 +1,9 @@
 <div align="center">
 
-#  Pratham Handa | Portfolio
+#  Anshuman Goel | Portfolio
 
-<a href="https://pratham.codes">
-<img src="https://img.shields.io/badge/Live%20Portfolio-pratham.codes-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
+<a href="https://anshuman.codes">
+<img src="https://img.shields.io/badge/Live%20Portfolio-anshuman.codes-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Portfolio" />
 </a>
 
 ### **AI-powered navigation. Performance-first UI. A portfolio that feels like a product.**
@@ -233,12 +233,12 @@ Common update points:
 
 ## 📬 Contact
 
-**Pratham Handa**
-- Portfolio: https://pratham.codes
-- LinkedIn: https://www.linkedin.com/in/prathamh/
-- GitHub: https://github.com/prathamhanda
-- Email: prathamhanda10@gmail.com
-- LeetCode: https://leetcode.com/u/prathamhanda/
+**Anshuman Goel**
+- Portfolio: https://anshuman.codes
+- LinkedIn: https://www.linkedin.com/in/anshumangoel/
+- GitHub: https://github.com/anshgoel01
+- Email: anshg112005@gmail.com
+- LeetCode: https://leetcode.com/u/anshgoel_012/
 <div align="center">
 
 **⭐ If you found this portfolio inspiring, consider giving it a star!**

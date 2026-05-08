@@ -28,7 +28,17 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Email</p>
-                  <p className="font-medium">prathamhanda10@gmail.com</p>
+                  <p className="font-medium">anshg112005@gmail.com</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-md border border-gray-200 dark:border-gray-700">
+                  <MapPin className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Mobile</p>
+                  <p className="font-medium">+91 9056953665</p>
                 </div>
               </div>
 

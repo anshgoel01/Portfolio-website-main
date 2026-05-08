@@ -66,11 +66,11 @@ const CodingDashboard = () => {
   const [codolioStats, setCodolioStats] = useState<CodolioStats | null>(null);
 
   // Platform usernames (allow overriding via Vite env variables)
-  const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'prathamhanda';
-  const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
-  const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'prathamh';
-  const CODECHEF_USER = (import.meta as any).env?.VITE_CODECHEF_USERNAME || 'prathamhanda';
-  const CODEFORCES_USER = (import.meta as any).env?.VITE_CODEFORCES_USERNAME || 'prathamhanda10';
+  const LEETCODE_USER = (import.meta as any).env?.VITE_LEETCODE_USERNAME || 'anshgoel_012';
+  const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'anshgoel01';
+  const GFG_USER = (import.meta as any).env?.VITE_GFG_USERNAME || 'anshgoel01';
+  const CODECHEF_USER = (import.meta as any).env?.VITE_CODECHEF_USERNAME || 'anshgoel01';
+  const CODEFORCES_USER = (import.meta as any).env?.VITE_CODEFORCES_USERNAME || 'anshgoel01';
 
   useEffect(() => {
     fetch('/codolio-stats.json')
@@ -98,7 +98,7 @@ const CodingDashboard = () => {
     }));
   }, [codolioStats]);
 
-  useEffect(() => { 
+  useEffect(() => {
     // Fetch GitHub contributions
     // Fetch GitHub contributions
     const fetchGitHubContributions = async () => {
@@ -111,7 +111,7 @@ const CodingDashboard = () => {
 
         // normalize shapes - the deno API sometimes returns weeks (array of arrays)
         let rawContribs: any[] = [];
-        if (Array.isArray(data.contributions)) {
+        if (data && Array.isArray(data.contributions)) {
           // contributions may be nested by week -> flatten if needed
           rawContribs = data.contributions.some(Array.isArray) ? (data.contributions as any[]).flat() : data.contributions;
         } else if (Array.isArray(data.data)) {
@@ -190,7 +190,7 @@ const CodingDashboard = () => {
     // debug toggle: set VITE_HEATMAP_TOOLTIP_DEBUG=true or set localStorage 'heatmapTooltipDebug' = '1'
     const envDebug = (import.meta as any).env?.VITE_HEATMAP_TOOLTIP_DEBUG === 'true';
     let runtimeDebug = false;
-    try { runtimeDebug = typeof window !== 'undefined' && localStorage.getItem('heatmapTooltipDebug') === '1'; } catch (e) {}
+    try { runtimeDebug = typeof window !== 'undefined' && localStorage.getItem('heatmapTooltipDebug') === '1'; } catch (e) { }
     const debug = isDev && (envDebug || runtimeDebug);
     // expose a quick toggle helper for local debugging
     try {
@@ -202,7 +202,7 @@ const CodingDashboard = () => {
           if (isDev) console.log('[heatmap-debug] set heatmapTooltipDebug =', val ? '1' : '0');
         };
       }
-    } catch (e) {}
+    } catch (e) { }
     if (container) {
       // Use pointer events for wider device support and more reliable targeting.
       // Structured in-memory log for debugging interactions
@@ -211,7 +211,7 @@ const CodingDashboard = () => {
           (window as any).__heatmapTooltipLog = (window as any).__heatmapTooltipLog || [];
           (window as any).__dumpHeatmapTooltipLog = () => JSON.parse(JSON.stringify((window as any).__heatmapTooltipLog || []));
         }
-      } catch (e) {}
+      } catch (e) { }
 
       const pushLog = (entry: any) => {
         if (!debug) return;
@@ -321,7 +321,7 @@ const CodingDashboard = () => {
       const onResize = () => adjust();
       window.addEventListener('resize', onResize);
 
-  // As a robust fallback: attach per-rect listeners directly to each [data-date] element
+      // As a robust fallback: attach per-rect listeners directly to each [data-date] element
       // This avoids delegation misses caused by SVG nesting or pointer event differences.
       const attachedRects: Array<{ el: Element; handlers: { move: (e: PointerEvent) => void; enter: (e: PointerEvent) => void; leave: (e: PointerEvent) => void } }> = [];
 
@@ -334,7 +334,7 @@ const CodingDashboard = () => {
             return;
           }
           pushLog({ event: 'attach-rects', count: nodes.length });
-          try { (window as any).__heatmapInitInfo = (window as any).__heatmapInitInfo || {}; (window as any).__heatmapInitInfo.lastAttach = Date.now(); (window as any).__heatmapInitInfo.lastCount = nodes.length; } catch (e) {}
+          try { (window as any).__heatmapInitInfo = (window as any).__heatmapInitInfo || {}; (window as any).__heatmapInitInfo.lastAttach = Date.now(); (window as any).__heatmapInitInfo.lastCount = nodes.length; } catch (e) { }
           nodes.forEach((n) => {
             const move = (ev: Event) => onPointerMove(ev as unknown as PointerEvent);
             const enter = (ev: Event) => onPointerOver(ev as unknown as PointerEvent);
@@ -369,20 +369,20 @@ const CodingDashboard = () => {
 
       // clean up on unmount
       return () => {
-        try { container?.removeEventListener('pointermove', onPointerMove); } catch (e) {}
-        try { container?.removeEventListener('pointerover', onPointerOver); } catch (e) {}
-        try { container?.removeEventListener('pointerout', onPointerOut); } catch (e) {}
-        try { window.removeEventListener('resize', onResize); } catch (e) {}
+        try { container?.removeEventListener('pointermove', onPointerMove); } catch (e) { }
+        try { container?.removeEventListener('pointerover', onPointerOver); } catch (e) { }
+        try { container?.removeEventListener('pointerout', onPointerOut); } catch (e) { }
+        try { window.removeEventListener('resize', onResize); } catch (e) { }
         try {
           // remove per-rect listeners if attached
           // attachedRects is closed-over; safe to iterate
           attachedRects.forEach(({ el, handlers }) => {
-            try { el.removeEventListener('pointermove', handlers.move as EventListener); } catch (e) {}
-            try { el.removeEventListener('pointerenter', handlers.enter as EventListener); } catch (e) {}
-            try { el.removeEventListener('pointerleave', handlers.leave as EventListener); } catch (e) {}
+            try { el.removeEventListener('pointermove', handlers.move as EventListener); } catch (e) { }
+            try { el.removeEventListener('pointerenter', handlers.enter as EventListener); } catch (e) { }
+            try { el.removeEventListener('pointerleave', handlers.leave as EventListener); } catch (e) { }
           });
-        } catch (e) {}
-        try { if (mo) mo.disconnect(); } catch (e) {}
+        } catch (e) { }
+        try { if (mo) mo.disconnect(); } catch (e) { }
       };
     }
 
@@ -415,7 +415,7 @@ const CodingDashboard = () => {
           dateCounts[dt] = (dateCounts[dt] || 0) + 1;
         });
 
-  const formatted = Object.keys(dateCounts).map((k) => ({ date: k, count: dateCounts[k] }));
+        const formatted = Object.keys(dateCounts).map((k) => ({ date: k, count: dateCounts[k] }));
         return formatted;
       } catch (err) {
         if (isDev) console.error('GitHub events fallback failed', err);
@@ -435,15 +435,15 @@ const CodingDashboard = () => {
 
   const problemData = hasCodolioBreakdown
     ? [
-        { name: 'Easy', value: codolioEasy, color: 'hsl(var(--chart-1))' },
-        { name: 'Medium', value: codolioMed, color: 'hsl(var(--chart-2))' },
-        { name: 'Hard', value: codolioHard, color: 'hsl(var(--chart-3))' },
-      ]
+      { name: 'Easy', value: codolioEasy, color: 'hsl(var(--chart-1))' },
+      { name: 'Medium', value: codolioMed, color: 'hsl(var(--chart-2))' },
+      { name: 'Hard', value: codolioHard, color: 'hsl(var(--chart-3))' },
+    ]
     : [
-        { name: 'Easy', value: _leetEasy, color: 'hsl(var(--chart-1))' },
-        { name: 'Medium', value: _leetMed, color: 'hsl(var(--chart-2))' },
-        { name: 'Hard', value: _leetHard, color: 'hsl(var(--chart-3))' },
-      ];
+      { name: 'Easy', value: _leetEasy, color: 'hsl(var(--chart-1))' },
+      { name: 'Medium', value: _leetMed, color: 'hsl(var(--chart-2))' },
+      { name: 'Hard', value: _leetHard, color: 'hsl(var(--chart-3))' },
+    ];
 
   // Preferred slice colors (LeetCode-like) used as fallbacks if entry.color isn't set
   const sliceColors = ['#28a745', '#f59e0b', '#ef4444'];
@@ -578,30 +578,35 @@ const CodingDashboard = () => {
   };
   const totalSolvedDisplayed = codolioStats?.totalSolved ?? leetcodeStats.totalSolved;
 
-  const statCards = [
+  const statCards: {
+    title: string;
+    value: string | number;
+    Icon?: any;
+    img?: string;
+    color: string;
+  }[] = [
     {
       title: "Total Questions Solved",
       value: totalSolvedDisplayed,
-      icon: Code2,
+      Icon: Code2,
       color: "text-blue-500 dark:text-blue-400",
     },
     {
       title: "Total Active Days",
       value: codolioStats?.totalActiveDays ?? 0,
-      icon: Calendar,
+      Icon: Calendar,
       color: "text-yellow-500 dark:text-yellow-400",
     },
     {
-      title: "Contest Badge",
-      // image path served from /public (place your badge at public/badge-knight.png)
-      value: 'Knight',
-      img: '/badge-knight.png',
+      title: "Learning Progress",
+      value: "Active",
+      Icon: Target,
       color: "text-orange-500 dark:text-orange-400",
     },
     {
-      title: "Contest Rating",
-      value: leetcodeStats.ContestRating,
-      icon: TrendingUp,
+      title: "Problem Solving",
+      value: "Daily",
+      Icon: Flame,
       color: "text-green-500 dark:text-green-400",
     },
   ];
@@ -633,11 +638,11 @@ const CodingDashboard = () => {
           </p>
           {/* Platform badges (stylish links) */}
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <PlatformLink name="LeetCode" url={`https://leetcode.com/${LEETCODE_USER}`} user={LEETCODE_USER} logo={"LeetCode_logo_black.png"} />
-          <PlatformLink name="GeeksforGeeks" url={`https://www.geeksforgeeks.org/user/${GFG_USER}`} user={GFG_USER} logo={"GeeksForGeeks_logo.png"} />
+            <PlatformLink name="LeetCode" url={`https://leetcode.com/u/${LEETCODE_USER}/`} user={LEETCODE_USER} logo={"LeetCode_logo_black.png"} />
+            {/* <PlatformLink name="GeeksforGeeks" url={`https://www.geeksforgeeks.org/user/${GFG_USER}`} user={GFG_USER} logo={"GeeksForGeeks_logo.png"} />
           <PlatformLink name="CodeChef" url={`https://www.codechef.com/users/${CODECHEF_USER}`} user={CODECHEF_USER} logo={"codechef.png"} />
-          <PlatformLink name="CodeForces" url={`https://codeforces.com/profile/${CODEFORCES_USER}`} user={CODEFORCES_USER} logo={"codeforces.webp"} />
-          <PlatformLink name="GitHub" url={`https://github.com/${GITHUB_USER}`} user={GITHUB_USER} />
+          <PlatformLink name="CodeForces" url={`https://codeforces.com/profile/${CODEFORCES_USER}`} user={CODEFORCES_USER} logo={"codeforces.webp"} /> */}
+            <PlatformLink name="GitHub" url={`https://github.com/${GITHUB_USER}`} user={GITHUB_USER} />
           </div>
         </div>
 
@@ -647,16 +652,16 @@ const CodingDashboard = () => {
             <Card key={index} className="border-muted/40 hover:border-primary/50 transition-transform duration-300 hover:shadow-2xl transform hover:-translate-y-2 group">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                            <h3 className="text-3xl font-bold">{stat.value}</h3>
-                          </div>
-                          {/* show image if provided, otherwise render icon component */}
-                          {stat.img ? (
-                            <img src={stat.img} alt={stat.title} className="w-13 h-12 rounded-md object-contain shadow-sm" />
-                          ) : (
-                            <stat.icon className={`w-8 h-8 ${stat.color} transition-transform duration-300 group-hover:scale-110`} />
-                          )}
+                  <div>
+                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
+                    <h3 className="text-3xl font-bold">{stat.value}</h3>
+                  </div>
+                  {/* show image if provided, otherwise render icon component */}
+                  {stat.img ? (
+                    <img src={stat.img} alt={stat.title} className="w-12 h-12 rounded-md object-contain shadow-sm" />
+                  ) : (
+                    <stat.Icon className={`w-8 h-8 ${stat.color} transition-transform duration-300 group-hover:scale-110`} />
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -754,7 +759,7 @@ const CodingDashboard = () => {
                       );
                     })()
                   }
-                  <YAxis 
+                  <YAxis
                     stroke="hsl(var(--muted-foreground))"
                     fontSize={12}
                   />
@@ -781,7 +786,7 @@ const CodingDashboard = () => {
         </div>
 
         {/* Contribution Heatmap */}
-          <Card className="border-muted/40 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+        <Card className="border-muted/40 transform transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <GithubIcon className="w-5 h-5 text-primary" />
@@ -790,7 +795,7 @@ const CodingDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto pb-4">
-                <div className="min-w-[700px]" ref={heatmapRef} style={{ position: 'relative' }}>
+              <div className="min-w-[700px]" ref={heatmapRef} style={{ position: 'relative' }}>
                 <CalendarHeatmap
                   startDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
                   endDate={new Date()}
@@ -840,7 +845,7 @@ const CodingDashboard = () => {
                       (async () => {
                         try {
                           setGhError(null);
-                          const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'prathamhanda';
+                          const GITHUB_USER = (import.meta as any).env?.VITE_GITHUB_USERNAME || 'anshgoel01';
                           const githubUrl = `https://github-contributions-api.deno.dev/${GITHUB_USER}.json`;
                           const response = await fetch(githubUrl);
                           if (!response.ok) throw new Error(`Status ${response.status}`);
@@ -851,7 +856,7 @@ const CodingDashboard = () => {
                           else if (Array.isArray(data.data)) rawContribs = data.data;
                           else if (Array.isArray((data || {}).years)) rawContribs = (data.years || []).flatMap((y: any) => y.contributions || []);
                           const formattedContributions = (rawContribs || []).map((contrib: any) => ({ date: contrib.date, count: contrib.count ?? contrib.contributionCount ?? 0 }));
-                          try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formattedContributions })); } catch (e) {}
+                          try { localStorage.setItem(`ghContribs:${GITHUB_USER}`, JSON.stringify({ ts: Date.now(), data: formattedContributions })); } catch (e) { }
                           setContributions(formattedContributions);
                         } catch (err: any) {
                           setGhError(String(err?.message || err));

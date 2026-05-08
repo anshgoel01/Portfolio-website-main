@@ -55,36 +55,28 @@ const CommandPalette = () => {
 
   const projectsData = [
     {
-      id: "brain-tumor",
-      title: "Brain Tumor Detector",
-      description: "Deep learning pipeline with 99.3% accuracy using PyTorch and YOLO",
+      id: "project-verifier",
+      title: "Project Verifier",
+      description: "Full-stack verification platform with real-time WebSocket leaderboard",
       category: "project" as const,
       icon: <Briefcase className="mr-2 h-4 w-4" />,
-      action: () => window.open("https://github.com/prathamhanda/BrainTumor-Detector", "_blank")
+      action: () => window.open("https://github.com/anshgoel01/VerifyHub", "_blank")
     },
     {
-      id: "road-intelligence",
-      title: "AI-RoadIntelligence",
-      description: "Real-time traffic optimization with YOLOv8 vehicle detection",
+      id: "distributed-cache-cpp",
+      title: "Distributed Cache CPP",
+      description: "High-performance distributed cache in C++ with consistent hashing",
       category: "project" as const,
       icon: <Briefcase className="mr-2 h-4 w-4" />,
-      action: () => window.open("https://github.com/prathamhanda/AI-RoadIntelligence", "_blank")
+      action: () => window.open("https://github.com/Pratiikksha/distributed-cache-cpp", "_blank")
     },
     {
-      id: "roomsonrent",
-      title: "RoomsOnRent",
-      description: "Containerized dual-portal platform for student housing",
+      id: "safe-space",
+      title: "Safe Space",
+      description: "Multimodal stress detection system with 94.1% accuracy",
       category: "project" as const,
       icon: <Briefcase className="mr-2 h-4 w-4" />,
-      action: () => window.open("https://github.com/prathamhanda/roomsonrent", "_blank")
-    },
-    {
-      id: "lead-society",
-      title: "LEAD Society Website",
-      description: "Official website for LEAD Society with event management",
-      category: "project" as const,
-      icon: <Briefcase className="mr-2 h-4 w-4" />,
-      action: () => window.open("https://leadtiet.netlify.app/", "_blank")
+      action: () => window.open("https://github.com/anshgoel01/safe-space", "_blank")
     },
   ];
 
@@ -351,21 +343,21 @@ const CommandPalette = () => {
         <CommandSeparator />
         <CommandGroup heading="Actions">
           <CommandItem onSelect={() => {
-            window.open('https://drive.google.com/file/d/1w7tvBBgr6TmbTeEXSwQiIs-8VHi9mBEf/view?usp=drive_link', '_blank');
+            window.open('/AnshumanResume.pdf', '_blank');
             setOpen(false);
           }}>
             <Download className="mr-2 h-4 w-4" />
             <span>View Resume</span>
           </CommandItem>
           <CommandItem onSelect={() => {
-            window.open("https://github.com/prathamhanda", "_blank");
+            window.open("https://github.com/anshgoel01", "_blank");
             setOpen(false);
           }}>
             <Github className="mr-2 h-4 w-4" />
             <span>View GitHub</span>
           </CommandItem>
           <CommandItem onSelect={() => {
-            window.open("https://linkedin.com/in/prathamh", "_blank");
+            window.open("https://linkedin.com/in/anshumangoel", "_blank");
             setOpen(false);
           }}>
             <Linkedin className="mr-2 h-4 w-4" />

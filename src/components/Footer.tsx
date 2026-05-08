@@ -19,13 +19,13 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Left Column */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-white">pratham.codes</h3>
+            <h3 className="text-2xl font-bold text-white">anshuman.codes</h3>
             <p className="text-gray-400">
-              Building intelligent systems where AI meets full stack development. Third year CSE student at Thapar Institute.
+              Building intelligent systems where AI meets full stack development. Pre Final Year Student at Thapar Institute.
             </p>
             <div className="flex gap-3">
               <a
-                href="https://linkedin.com/in/prathamh"
+                href="https://linkedin.com/in/anshumangoel"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
@@ -33,7 +33,7 @@ const Footer = () => {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="https://github.com/prathamhanda"
+                href="https://github.com/anshgoel01"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
@@ -75,10 +75,10 @@ const Footer = () => {
                 Open to SDE and AI/ML opportunities. Let's build something impactful together.
               </p>
               <a
-                href="mailto:prathamhanda10@gmail.com"
+                href="mailto:anshg112005@gmail.com"
                 className="text-sm text-white hover:text-blue-400 flex items-center gap-2 transition-colors"
               >
-                prathamhanda10@gmail.com
+                anshg112005@gmail.com
                 <ArrowUp className="w-4 h-4 rotate-45" />
               </a>
               <Button
@@ -96,24 +96,24 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400">
-              © 2025 Pratham Handa. All rights reserved.
+              © 2025 Anshuman Goel. All rights reserved.
             </p>
             <div className="flex gap-6 text-xs text-gray-400">
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                LeetCode: Knight
+                Status: Available for Work
               </span>
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                Rating: 1939
+                Location: Patiala, India
               </span>
               <span className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                CGPA: 9.8
+                CGPA: 7.3
               </span>
             </div>
             <p className="text-sm text-gray-400">
-              Made with ❤️ in Patiala
+              Made with ❤️ by Anshuman
               <span className="block text-xs text-white/40 mt-1 ml-6">|| ॐ नमः शिवाय ||</span>
             </p>
           </div>

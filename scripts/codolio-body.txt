@@ -20,9 +20,9 @@ Log In
 Toggle Sidebar
 Company Wise Kit 🌟
 Login
-Pratham Handa
-@prathamhanda
-I'm Pratham Handa, a 3rd-year CS student (9.8 CGPA) & incoming Google intern. I excel in full-stack & AI development, a LeetCode Knight.
+Anshuman Goel
+@anshgoel01
+I'm Anshuman Goel, a 2nd-year CS student (7.3 CGPA). I excel in high-performance software engineering and AI development.
 India
 Thapar Institute of Engineering and Technology
 Problem Solving Stats

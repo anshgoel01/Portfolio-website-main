@@ -1,47 +1,41 @@
 // Resume context for AI assistant
 const RESUME_CONTEXT = `PERSONAL INFORMATION & CONTACT:
-Name: Pratham Handa
+Name: Anshuman Goel
 Role: Computer Science Student
-Education: 3rd Year, CSE, Thapar Institute (CGPA: 9.8)
-Email: prathamhanda10@gmail.com
-LinkedIn: linkedin.com/in/prathamh
-GitHub: github.com/prathamhanda
-Portfolio: pratham.codes
+Education: Pre Final Year Student, CSE, Thapar Institute (CGPA: 7.3)
+Email: anshg112005@gmail.com
+LinkedIn: linkedin.com/in/anshumangoel
+GitHub: github.com/anshgoel01
+Portfolio: anshuman.codes
 PROFESSIONAL SUMMARY:
-Computer Science student with experience in full stack development and AI-based projects. Strong academic record and competitive programming background.
+Computer Science student with experience in high-performance software engineering and applied AI. Focused on building scalable, secure, and intelligent systems.
 WORK EXPERIENCE:
-1. Full Stack Developer Intern — DBuck (2023)
-   - Built MERN-based student housing platform
-   - Used by 10,000+ students
-   - Implemented booking and payment features
-   - Tech: React, Node.js, MongoDB, Docker
-2. Web Solutions Engineer Intern — Google (Summer 2026)
-   - Incoming intern
+1. Software Engineering Intern — SafeSpace (May 2025 – July 2025)
+   - Developed multimodal stress detection system (94.1% accuracy)
+   - Designed Agreement-Aware Fusion (AAF) algorithm
+   - Integrated LLM (Phi-2) and Whisper for mental health recommendations
 TECHNICAL SKILLS:
 Programming Languages:
-- C++, Python, JavaScript/TypeScript, Java, SQL
+- C++, Python, JavaScript/TypeScript, SQL
 Frameworks & Technologies:
-- React, Next.js, Node.js, Express
-- MongoDB, PostgreSQL
-- PyTorch, TensorFlow, YOLO, OpenCV
-- Git, Docker
+- React, Node.js, Express, Supabase, PostgreSQL, MongoDB
+- TensorFlow, PyTorch, Scikit-learn, CNN, DNN, LLM
+- Git, Docker, Vite, Vercel, AWS (Basic)
 PROJECT PORTFOLIO:
-1. Brain Tumor Detector
-   - AI-based tumor classification and segmentation
-   - Built using PyTorch, YOLO, FastAPI
-2. AI-RoadIntelligence
-   - Real-time traffic optimization system
-   - Computer vision based solution
-3. RoomsOnRent
-   - Full stack student housing platform
-   - MERN + Docker
+1. Project Verifier
+   - Real-time WebSocket leaderboard
+   - Automated validation of 6,000+ submissions
+   - Live: https://projectverifier.vercel.app/
+2. Distributed Cache CPP
+   - 682,000+ ops/sec with consistent hashing
+   - Repo: https://github.com/Pratiikksha/distributed-cache-cpp
+3. Safe Space
+   - Multimodal stress detection
+   - Repo: https://github.com/anshgoel01/safe-space
 ACHIEVEMENTS & LEADERSHIP:
-- LeetCode Knight Badge (Top 3.5%)
-- 1000+ DSA problems solved
-- Merit I & III Scholarship recipient from TIET
-- Reliance Undergraduate Scholar
-- Student Placement Representative (CSE)
-- Joint Secretary, LEAD Society
+- Innovation Award – Cyber AI Hackathon 2025
+- Head of Logistics, Mudra Cultural Society
+- Head of Logistics, MUN Society
 ADDITIONAL INFORMATION:
 Languages: English, Hindi, Punjabi
 `;
@@ -58,17 +52,17 @@ interface GeminiResponse {
 
 // Fallback responses for common queries when AI fails
 const fallbackResponses: Record<string, string> = {
-  "work style": "I thrive in collaborative environments, following agile methodologies with a strong emphasis on clean code, documentation, and code reviews. I'm detail-oriented and regularly contribute to open-source projects.",
-  "experience": "As a Full Stack Developer Intern at DBuck, I led the development of a MERN stack web app serving 10,000+ students, implementing real-time booking systems and achieving 40% platform efficiency improvement.",
-  "skills": "I'm proficient in C++, Python, JavaScript/TypeScript for programming; React, Node.js, Express.js, MongoDB for web development; and PyTorch, TensorFlow, YOLO for AI/ML, with practical experience in Docker and AWS.",
-  "education": "I'm a 3rd-year Computer Science Engineering student at Thapar Institute, maintaining a 9.8 CGPA and receiving both Reliance Undergraduate and Merit III Scholarships.",
-  "projects": "My portfolio includes the Brain Tumor Detector (99.3% accuracy), AI-RoadIntelligence for traffic optimization (35% reduction in wait times), RoomsOnRent platform, and LEAD Society's website.",
-  "contact": "You can reach me at prathamhanda10@gmail.com, connect on LinkedIn (linkedin.com/in/prathamh), or check out my work on GitHub (github.com/prathamhanda).",
-  "achievements": "I hold a LeetCode Knight Badge (top 3.5% globally), solved 1000+ DSA problems, and serve as Student Placement Representative while maintaining a 9.8 CGPA.",
-  "leadership": "As Joint Secretary of LEAD Society, I've mentored 50+ students in DSA and web development, organized 10+ technical workshops, and maintain active involvement in the tech community.",
-  "availability": "I'm open to full-time opportunities starting from May 2024, with a focus on full-stack development, AI/ML, or software engineering roles.",
-  "text": "You can reach me through my website (pratham.codes), LinkedIn (linkedin.com/in/prathamh), or email (prathamhanda10@gmail.com).",
-  "contact information": "Feel free to reach out via email at prathamhanda10@gmail.com or connect with me on LinkedIn at linkedin.com/in/prathamh.",
+  "work style": "I thrive in collaborative environments, following agile methodologies with a strong emphasis on clean code, documentation, and code reviews. I'm detail-oriented and focused on building scalable systems.",
+  "experience": "As a Software Engineering Intern at SafeSpace, I developed a multimodal stress detection system with 94.1% accuracy and designed a novel Agreement-Aware Fusion algorithm.",
+  "skills": "I'm proficient in C++, Python, JavaScript/TypeScript, and SQL. My expertise includes React, Node.js, Express, Supabase, TensorFlow, and PyTorch, with experience in distributed systems and AI.",
+  "education": "I'm a Pre Final Year Student at Thapar Institute, maintaining a 7.3 CGPA and actively participating in technical societies.",
+  "projects": "My portfolio features Project Verifier, a student verification portal for 6,000+ users, Distributed Cache CPP achieving 682,000+ ops/sec, and Safe Space AI.",
+  "contact": "You can reach me at anshg112005@gmail.com, connect on LinkedIn (linkedin.com/in/anshumangoel), or check out my work on GitHub (github.com/anshgoel01).",
+  "achievements": "I won the Innovation Award at the Cyber AI Hackathon 2025 and hold leadership roles as Head of Logistics in Mudra and MUN societies at Thapar Institute.",
+  "leadership": "As Head of Logistics for Mudra and MUN societies, I've managed events for 1000+ attendees and optimized resource allocation, reducing costs by 20%.",
+  "availability": "I'm open to SDE and AI/ML internship or full-time opportunities where I can apply my skills in software engineering and AI.",
+  "text": "You can reach me through my website (anshuman.codes), LinkedIn (linkedin.com/in/anshumangoel), or email (anshg112005@gmail.com).",
+  "contact information": "Feel free to reach out via email at anshg112005@gmail.com or connect with me on LinkedIn at linkedin.com/in/anshumangoel.",
 };
 
 function getFallbackResponse(query: string): string | null {
@@ -153,13 +147,13 @@ export async function queryAI(query: string): Promise<string> {
     }
 
     // Enhanced prompt with better context and instructions
-    const prompt = `You are an AI assistant for Pratham Handa's portfolio website. You have access to Pratham's complete professional profile and should provide helpful, accurate responses to visitors' questions. Consider the following detailed information:
+    const prompt = `You are an AI assistant for Anshuman Goel's portfolio website. You have access to Anshuman's complete professional profile and should provide helpful, accurate responses to visitors' questions. Consider the following detailed information:
 ${RESUME_CONTEXT}
 
 Question: ${query}
 Instructions for providing responses:
 1. Voice and Tone:
-   - Answer in Pratham's voice (first person)
+   - Answer in Anshuman's voice (first person)
    - Be confident but humble
 2. Content Guidelines:
    - Provide specific, data-backed information when available

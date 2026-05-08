@@ -105,7 +105,7 @@ const Hero = () => {
           </h1>
 
           <p className="text-lg text-muted-foreground max-w-lg">
-            Hi, I'm <span className="text-foreground font-medium">Pratham Handa</span>. <br></br>I solve real problems through thoughtful engineering, combining strong fundamentals with practical execution. I care deeply about performance, clarity, and building systems that scale beyond prototypes.
+            Hi, I'm <span className="text-foreground font-medium">Anshuman Goel</span>. <br></br>I solve real problems through thoughtful engineering, combining strong fundamentals with practical execution. I care deeply about performance, clarity, and building systems that scale beyond prototypes.
           </p>
 
           <div className="flex flex-wrap gap-4">
@@ -126,7 +126,7 @@ const Hero = () => {
               size="lg"
               variant="outline"
               className="rounded-full gap-2 px-8 py-6 text-base font-medium border-2 border-black dark:border-white hover:bg-black hover:text-white hover:border-white dark:hover:bg-white dark:hover:text-black dark:hover:border-black"
-              onClick={() => window.open('https://drive.google.com/file/d/1w7tvBBgr6TmbTeEXSwQiIs-8VHi9mBEf/view?usp=sharing', '_blank')}
+              onClick={() => window.open('/AnshumanResume.pdf', '_blank')}
             >
               View Resume
               <Download className="w-5 h-5" />
@@ -140,7 +140,7 @@ const Hero = () => {
             {/* subtle framed border */}
             <div className="rounded-3xl p-1 bg-white/60 dark:bg-black/30 relative">
               <img
-                src="/Pratham-PFP.jpg"
+                src="/Anshuman-PFP.jpeg"
                 alt="Profile"
                 className="w-full h-[420px] sm:h-[500px] md:h-[550px] object-cover rounded-2xl transition-transform duration-500 scale-150 sm:scale-100 sm:group-hover:scale-105"
               />
