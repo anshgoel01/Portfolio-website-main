@@ -11,7 +11,8 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update:codolio": "node scripts/scrape-codolio.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
