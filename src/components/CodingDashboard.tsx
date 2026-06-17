@@ -24,17 +24,7 @@ import {
   Sector,
 } from "recharts";
 
-const DEFAULT_RATING_DATA = [
-  { date: "Jan", rating: 1416 },
-  { date: "Feb", rating: 1416 },
-  { date: "Mar", rating: 1416 },
-  { date: "Apr", rating: 1416 },
-  { date: "May", rating: 1416 },
-  { date: "Jun", rating: 1416 },
-  { date: "Jul", rating: 1416 },
-  { date: "Aug", rating: 1416 },
-  { date: "Sep", rating: 1416 },
-];
+const DEFAULT_RATING_DATA: Array<{ date: string; rating: number }> = [];
 
 interface LeetCodeStats {
   totalSolved: number;
@@ -43,7 +33,6 @@ interface LeetCodeStats {
   hardSolved: number;
   ranking: number;
   contributionPoints: number;
-  ContestRating: number;
 }
 
 interface ContributionDay {
@@ -55,6 +44,8 @@ interface CodolioStats {
   totalSolved: number;
   rank: number;
   streak: number;
+  rating?: number;
+  maxStreak?: number;
   totalActiveDays?: number;
   easySolved?: number;
   mediumSolved?: number;
@@ -71,7 +62,6 @@ const CodingDashboard = () => {
     hardSolved: 0,
     ranking: 0,
     contributionPoints: 0,
-    ContestRating: 1871,
   });
   const [contributions, setContributions] = useState<ContributionDay[]>([]);
   const heatmapRef = useRef<HTMLDivElement | null>(null);
@@ -126,6 +116,27 @@ const CodingDashboard = () => {
       mediumSolved: codolioStats.mediumSolved ?? prev.mediumSolved,
       hardSolved: codolioStats.hardSolved ?? prev.hardSolved,
     }));
+  }, [codolioStats]);
+
+  useEffect(() => {
+    if (!codolioStats) {
+      setRatingData([]);
+      return;
+    }
+
+    if (typeof codolioStats.rating === "number") {
+      setRatingData([
+        {
+          date: new Date(codolioStats.lastUpdated).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+          }),
+          rating: codolioStats.rating,
+        },
+      ]);
+    } else {
+      setRatingData([]);
+    }
   }, [codolioStats]);
 
   useEffect(() => {
@@ -816,6 +827,7 @@ const CodingDashboard = () => {
   const statCards: {
     title: string;
     value: string | number;
+    detail?: string;
     Icon?: any;
     img?: string;
     color: string;
@@ -829,6 +841,9 @@ const CodingDashboard = () => {
     {
       title: "Total Active Days",
       value: codolioStats?.totalActiveDays ?? 0,
+      detail: codolioStats
+        ? `Max streak ${codolioStats.maxStreak ?? codolioStats.streak ?? 0}`
+        : undefined,
       Icon: Calendar,
       color: "text-yellow-500 dark:text-yellow-400",
     },
@@ -912,6 +927,11 @@ const CodingDashboard = () => {
                       {stat.title}
                     </p>
                     <h3 className="text-3xl font-bold">{stat.value}</h3>
+                    {stat.detail && (
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {stat.detail}
+                      </p>
+                    )}
                   </div>
                   {/* show image if provided, otherwise render icon component */}
                   {stat.img ? (

@@ -89,12 +89,14 @@ try {
       const parsed = JSON.parse(nextData);
       const matchesKey = (key) =>
         typeof key === "string" &&
-        /total.*solv|problems.*solv|questions.*solv|global.*rank|current.*rank|\brank\b|current.*streak|\bstreak\b/i.test(key);
+        /total.*solv|problems.*solv|questions.*solv|global.*rank|current.*rank|\brank\b|current.*streak|\bstreak\b|contest.*rating|\brating\b|max.*streak|longest.*streak/i.test(key);
 
       const found = {
         totalSolved: null,
         rank: null,
         streak: null,
+        rating: null,
+        maxStreak: null,
       };
 
       const visit = (value) => {
@@ -112,8 +114,10 @@ try {
             const n = typeof v === "number" ? v : parseFirstInt(v);
             if (typeof n === "number") {
               if ((/solv|questions.*solv|problems.*solv/.test(key)) && found.totalSolved == null) found.totalSolved = n;
+              else if ((/max.*streak|longest.*streak/.test(key)) && found.maxStreak == null) found.maxStreak = n;
               else if ((/streak/.test(key)) && found.streak == null) found.streak = n;
               else if ((/rank/.test(key)) && found.rank == null) found.rank = n;
+              else if ((/rating/.test(key)) && found.rating == null) found.rating = n;
             }
           }
           visit(v);
@@ -122,7 +126,14 @@ try {
 
       visit(parsed);
 
-      if (found.totalSolved == null && found.rank == null && found.streak == null) return null;
+      if (
+        found.totalSolved == null &&
+        found.rank == null &&
+        found.streak == null &&
+        found.rating == null &&
+        found.maxStreak == null
+      )
+        return null;
       return found;
     } catch {
       return null;
@@ -195,6 +206,24 @@ try {
       getTextByLabel("Streak") ||
       0;
 
+    const rating =
+      getFromBodyText([
+        /Contest\s+Rating\s*[:\-]?\s*(\d[\d,]*)/i,
+        /Rating\s*[:\-]?\s*(\d[\d,]*)/i,
+      ]) ||
+      getTextByLabel("Contest Rating") ||
+      getTextByLabel("Rating") ||
+      0;
+
+    const maxStreak =
+      getFromBodyText([
+        /Max\s+Streak\s*[:\-]?\s*(\d[\d,]*)/i,
+        /Longest\s+Streak\s*[:\-]?\s*(\d[\d,]*)/i,
+      ]) ||
+      getTextByLabel("Max Streak") ||
+      getTextByLabel("Longest Streak") ||
+      0;
+
     // Difficulty breakdown (Codolio displays this under the 'Problems Solved' section)
     const getDifficultyBreakdown = () => {
       const bodyText = document.body?.innerText || "";
@@ -227,6 +256,8 @@ try {
       hardSolved,
       rank,
       streak,
+      rating,
+      maxStreak,
       totalActiveDays,
       lastUpdated: new Date().toISOString(),
     };
@@ -240,6 +271,11 @@ try {
     hardSolved: Number(stats?.hardSolved) || 0,
     rank: Number(nextStats?.rank ?? stats?.rank) || 0,
     streak: Number(nextStats?.streak ?? stats?.streak) || 0,
+    rating: Number(nextStats?.rating ?? stats?.rating) || 0,
+    maxStreak:
+      Number(nextStats?.maxStreak ?? stats?.maxStreak ?? stats?.streak) ||
+      Number(nextStats?.streak ?? stats?.streak) ||
+      0,
     totalActiveDays: Number(stats?.totalActiveDays) || 0,
     lastUpdated: typeof stats?.lastUpdated === "string" ? stats.lastUpdated : new Date().toISOString(),
   };
