@@ -6,8 +6,11 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const OUTPUT_FILE = path.join(__dirname, "../public/codolio-stats.json");
-const PROFILE_URL = process.env.CODOLIO_PROFILE_URL || "https://codolio.com/profile/anshgoel_01";
-const EXPECTED_USERNAME = (process.env.CODOLIO_EXPECTED_USERNAME || "anshgoel_01").toLowerCase();
+const PROFILE_URL =
+  process.env.CODOLIO_PROFILE_URL || "https://codolio.com/profile/anshgoel_01";
+const EXPECTED_USERNAME = (
+  process.env.CODOLIO_EXPECTED_USERNAME || "anshgoel_01"
+).toLowerCase();
 
 const log = (...args) => console.log("[codolio]", ...args);
 
@@ -37,7 +40,7 @@ try {
   page.setDefaultTimeout(60_000);
 
   await page.setUserAgent(
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
   );
   await page.setViewport({ width: 1365, height: 768 });
 
@@ -47,7 +50,10 @@ try {
   });
 
   log("Resource:", PROFILE_URL);
-  const resp = await page.goto(PROFILE_URL, { waitUntil: "networkidle2", timeout: 60_000 });
+  const resp = await page.goto(PROFILE_URL, {
+    waitUntil: "networkidle2",
+    timeout: 60_000,
+  });
   log("HTTP status:", resp?.status?.() ?? "(no response)");
   log("Final URL:", page.url());
   try {
@@ -62,18 +68,27 @@ try {
   // If Codolio redirects to home/login for bots, this will time out and we’ll capture debug artifacts.
   try {
     await page.waitForFunction(
-      (u) => (document.body?.innerText || "").toLowerCase().includes(String(u).toLowerCase()),
+      (u) =>
+        (document.body?.innerText || "")
+          .toLowerCase()
+          .includes(String(u).toLowerCase()),
       { timeout: 20_000 },
-      EXPECTED_USERNAME
+      EXPECTED_USERNAME,
     );
   } catch {
     // ignore: will be handled by debug capture later
   }
 
   // Give the client-side app a moment to render its numbers
-  await page.waitForFunction(() => document.body && document.body.innerText && document.body.innerText.length > 200, {
-    timeout: 30_000,
-  });
+  await page.waitForFunction(
+    () =>
+      document.body &&
+      document.body.innerText &&
+      document.body.innerText.length > 200,
+    {
+      timeout: 30_000,
+    },
+  );
 
   // If Codolio is served via Next.js, stats may be present in __NEXT_DATA__ (more stable than DOM scraping)
   let nextData = null;
@@ -89,7 +104,9 @@ try {
       const parsed = JSON.parse(nextData);
       const matchesKey = (key) =>
         typeof key === "string" &&
-        /total.*solv|problems.*solv|questions.*solv|global.*rank|current.*rank|\brank\b|current.*streak|\bstreak\b|contest.*rating|\brating\b|max.*streak|longest.*streak/i.test(key);
+        /total.*solv|problems.*solv|questions.*solv|global.*rank|current.*rank|\brank\b|current.*streak|\bstreak\b|contest.*rating|\brating\b|max.*streak|longest.*streak/i.test(
+          key,
+        );
 
       const found = {
         totalSolved: null,
@@ -113,11 +130,21 @@ try {
             const key = k.toLowerCase();
             const n = typeof v === "number" ? v : parseFirstInt(v);
             if (typeof n === "number") {
-              if ((/solv|questions.*solv|problems.*solv/.test(key)) && found.totalSolved == null) found.totalSolved = n;
-              else if ((/max.*streak|longest.*streak/.test(key)) && found.maxStreak == null) found.maxStreak = n;
-              else if ((/streak/.test(key)) && found.streak == null) found.streak = n;
-              else if ((/rank/.test(key)) && found.rank == null) found.rank = n;
-              else if ((/rating/.test(key)) && found.rating == null) found.rating = n;
+              if (
+                /solv|questions.*solv|problems.*solv/.test(key) &&
+                found.totalSolved == null
+              )
+                found.totalSolved = n;
+              else if (
+                /max.*streak|longest.*streak/.test(key) &&
+                found.maxStreak == null
+              )
+                found.maxStreak = n;
+              else if (/streak/.test(key) && found.streak == null)
+                found.streak = n;
+              else if (/rank/.test(key) && found.rank == null) found.rank = n;
+              else if (/rating/.test(key) && found.rating == null)
+                found.rating = n;
             }
           }
           visit(v);
@@ -162,7 +189,9 @@ try {
 
     const getTextByLabel = (label) => {
       const elements = Array.from(document.querySelectorAll("*"));
-      const target = elements.find((el) => el.textContent?.trim().toLowerCase().includes(label.toLowerCase()));
+      const target = elements.find((el) =>
+        el.textContent?.trim().toLowerCase().includes(label.toLowerCase()),
+      );
       if (!target) return null;
 
       const parent = target.closest("div");
@@ -231,9 +260,12 @@ try {
       const idx = lower.indexOf("problems solved");
       const scope = idx >= 0 ? bodyText.slice(idx, idx + 2500) : bodyText;
 
-      const easySolved = parseFirstInt(scope.match(/\bEasy\b\s*(\d[\d,]*)/i)?.[1]) ?? 0;
-      const mediumSolved = parseFirstInt(scope.match(/\bMedium\b\s*(\d[\d,]*)/i)?.[1]) ?? 0;
-      const hardSolved = parseFirstInt(scope.match(/\bHard\b\s*(\d[\d,]*)/i)?.[1]) ?? 0;
+      const easySolved =
+        parseFirstInt(scope.match(/\bEasy\b\s*(\d[\d,]*)/i)?.[1]) ?? 0;
+      const mediumSolved =
+        parseFirstInt(scope.match(/\bMedium\b\s*(\d[\d,]*)/i)?.[1]) ?? 0;
+      const hardSolved =
+        parseFirstInt(scope.match(/\bHard\b\s*(\d[\d,]*)/i)?.[1]) ?? 0;
 
       return { easySolved, mediumSolved, hardSolved };
     };
@@ -277,7 +309,10 @@ try {
       Number(nextStats?.streak ?? stats?.streak) ||
       0,
     totalActiveDays: Number(stats?.totalActiveDays) || 0,
-    lastUpdated: typeof stats?.lastUpdated === "string" ? stats.lastUpdated : new Date().toISOString(),
+    lastUpdated:
+      typeof stats?.lastUpdated === "string"
+        ? stats.lastUpdated
+        : new Date().toISOString(),
   };
 
   log("Extracted stats:", normalized);
@@ -286,11 +321,20 @@ try {
   // These artifacts are NOT committed by the GitHub Action (it only commits the JSON file).
   if (normalized.totalSolved === 0) {
     try {
-      const bodyText = await page.evaluate(() => document.body?.innerText || "");
+      const bodyText = await page.evaluate(
+        () => document.body?.innerText || "",
+      );
       const debugDir = path.join(__dirname, "../scripts");
       fs.mkdirSync(debugDir, { recursive: true });
-      fs.writeFileSync(path.join(debugDir, "codolio-body.txt"), bodyText.slice(0, 50_000), "utf8");
-      await page.screenshot({ path: path.join(debugDir, "codolio.png"), fullPage: true });
+      fs.writeFileSync(
+        path.join(debugDir, "codolio-body.txt"),
+        bodyText.slice(0, 50_000),
+        "utf8",
+      );
+      await page.screenshot({
+        path: path.join(debugDir, "codolio.png"),
+        fullPage: true,
+      });
       log("Debug saved: scripts/codolio-body.txt and scripts/codolio.png");
     } catch (e) {
       log("Debug capture failed:", e?.message || e);
@@ -298,7 +342,11 @@ try {
   }
 
   fs.mkdirSync(path.dirname(OUTPUT_FILE), { recursive: true });
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(normalized, null, 2) + "\n", "utf8");
+  fs.writeFileSync(
+    OUTPUT_FILE,
+    JSON.stringify(normalized, null, 2) + "\n",
+    "utf8",
+  );
   log("Saved to", OUTPUT_FILE);
 } catch (error) {
   console.error("[codolio] Error scraping Codolio:", error);

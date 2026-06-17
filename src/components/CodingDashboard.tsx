@@ -127,10 +127,13 @@ const CodingDashboard = () => {
     if (typeof codolioStats.rating === "number") {
       setRatingData([
         {
-          date: new Date(codolioStats.lastUpdated).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-          }),
+          date: new Date(codolioStats.lastUpdated).toLocaleDateString(
+            undefined,
+            {
+              month: "short",
+              day: "numeric",
+            },
+          ),
           rating: codolioStats.rating,
         },
       ]);
