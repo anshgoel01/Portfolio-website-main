@@ -27,8 +27,31 @@ jobs:
       - name: Run scraper
         run: node scripts/scrape-codolio.js
 
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - id: commit-changes
+        name: Commit changes and push branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          BRANCH="update-codolio-stats-${{ github.run_id }}"
+          git checkout -b "$BRANCH"
+          git add public/codolio-stats.json || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            echo "committed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "chore: update Codolio stats [skip ci]"
+            git push --set-upstream origin "$BRANCH"
+            echo "committed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create Pull Request if there are changes
+        if: steps.commit-changes.outputs.committed == 'true'
+        uses: peter-evans/create-pull-request@v5
         with:
-          commit_message: "chore: update Codolio stats [skip ci]"
-          file_pattern: "public/codolio-stats.json"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update Codolio stats [skip ci]"
+          branch: update-codolio-stats-${{ github.run_id }}
+          title: "chore: update Codolio stats"
+          body: |
+            This automated PR updates the Codolio stats JSON file.
+          labels: automated
