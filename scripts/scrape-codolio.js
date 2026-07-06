@@ -268,15 +268,33 @@ async function tryPuppeteer() {
       };
 
       const getTextByLabel = (label) => {
-        const elements = Array.from(document.querySelectorAll("*"));
-        const target = elements.find((el) =>
-          el.textContent?.trim().toLowerCase().includes(label.toLowerCase()),
+        const normalized = label.toLowerCase().trim();
+        const elements = Array.from(document.querySelectorAll("*")).filter(
+          (el) => el.textContent?.trim().toLowerCase() === normalized,
         );
-        if (!target) return null;
-        const parent = target.closest("div");
-        if (!parent) return null;
-        const text = parent.innerText || "";
-        return parseFirstInt(text);
+        for (const target of elements) {
+          const nextText = (() => {
+            const nextEl = target.nextElementSibling;
+            if (nextEl?.textContent) return nextEl.textContent.trim();
+            const parent = target.parentElement;
+            if (!parent) return "";
+            const siblingTexts = Array.from(parent.childNodes)
+              .filter((node) => node !== target)
+              .map((node) => node.textContent?.trim() || "")
+              .filter(Boolean)
+              .join(" ");
+            return siblingTexts;
+          })();
+          const nextNumber = parseFirstInt(nextText);
+          if (typeof nextNumber === "number") return nextNumber;
+
+          const parent = target.parentElement;
+          if (parent) {
+            const parentNumber = parseFirstInt(parent.innerText || "");
+            if (typeof parentNumber === "number") return parentNumber;
+          }
+        }
+        return null;
       };
 
       const totalSolved =
