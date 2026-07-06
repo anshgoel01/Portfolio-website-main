@@ -49,8 +49,9 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update Codolio stats [skip ci]"
+          base: main
           branch: update-codolio-stats-${{ github.run_id }}
+          commit-message: "chore: update Codolio stats [skip ci]"
           title: "chore: update Codolio stats"
           body: |
             This automated PR updates the Codolio stats JSON file.
