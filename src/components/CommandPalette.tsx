@@ -102,7 +102,7 @@ const CommandPalette = () => {
     if (!query.trim()) return [];
 
     const lowerQuery = query.toLowerCase();
-    
+
     // Secret command to check Gemini API status
     if (lowerQuery === "!status gemini" || lowerQuery === "!gemini") {
       const checkAPI = async () => {
@@ -212,8 +212,8 @@ const CommandPalette = () => {
 
   const commandContent = (
     <>
-      <CommandInput 
-        placeholder={isMobile ? "Search portfolio or commands" : "Search portfolio, ask questions, or use commands... (AI-powered)"} 
+      <CommandInput
+        placeholder={isMobile ? "Search portfolio or commands" : "Search portfolio, ask questions, or use commands... (AI-powered)"}
         value={searchQuery}
         onValueChange={setSearchQuery}
       />
@@ -242,11 +242,11 @@ const CommandPalette = () => {
                   <div className="text-xs font-semibold text-muted-foreground mb-2">🤖 AI ASSISTANT</div>
                   <div className="flex items-start gap-3">
                     <Sparkles className="h-4 w-4 mt-0.5 flex-shrink-0 text-blue-500" />
-                        <p className="text-sm text-foreground leading-relaxed flex-1 whitespace-pre-wrap break-words">{aiResponse}</p>
-                        {/* aria-live region for screen readers on mobile */}
-                        {isMobile && (
-                          <div className="sr-only" aria-live="polite">AI response: {aiResponse}</div>
-                        )}
+                    <p className="text-sm text-foreground leading-relaxed flex-1 whitespace-pre-wrap break-words">{aiResponse}</p>
+                    {/* aria-live region for screen readers on mobile */}
+                    {isMobile && (
+                      <div className="sr-only" aria-live="polite">AI response: {aiResponse}</div>
+                    )}
                   </div>
                 </div>
                 <CommandSeparator />
@@ -280,13 +280,13 @@ const CommandPalette = () => {
         )}
 
         <CommandGroup heading="Suggestions">
-          <CommandItem 
+          <CommandItem
             onSelect={() => setSearchQuery(aiSuggestions[currentSuggestion])}
             className="group"
           >
             <Sparkles className="mr-2 h-4 w-4 text-foreground transition-colors" />
             <div className="suggestion-flip-container overflow-hidden">
-              <span 
+              <span
                 key={currentSuggestion}
                 className="text-foreground transition-colors inline-block animate-flip-text"
               >
@@ -334,7 +334,7 @@ const CommandPalette = () => {
             <Briefcase className="mr-2 h-4 w-4" />
             <span>View Projects</span>
           </CommandItem>
-          
+
           <CommandItem onSelect={() => handleNavigation("#contact")}>
             <Mail className="mr-2 h-4 w-4" />
             <span>Contact Me</span>

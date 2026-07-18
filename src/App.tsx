@@ -13,8 +13,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { useState } from "react";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import CommandPalette from "@/components/CommandPalette";
-import MobileFAB from "@/components/MobileFAB";
+
 import Preloader from "@/components/Preloader";
 
 const queryClient = new QueryClient();
@@ -24,8 +23,6 @@ const RootLayout = () => {
     <>
       <ScrollRestoration />
       <Outlet />
-      <CommandPalette />
-      <MobileFAB />
     </>
   );
 };
@@ -38,11 +35,7 @@ const router = createBrowserRouter([
       { path: "*", element: <NotFound /> },
     ],
   },
-], {
-  future: {
-    v7_startTransition: true,
-  },
-});
+]);
 
 const App = () => {
   const [showPreloader, setShowPreloader] = useState(true);

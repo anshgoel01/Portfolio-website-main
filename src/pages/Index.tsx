@@ -8,7 +8,6 @@ import Projects from "@/components/Projects";
 import CodingDashboard from "@/components/CodingDashboard";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import MobileFAB from "@/components/MobileFAB";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -56,7 +55,6 @@ const Index = () => {
         <CodingDashboard />
         <Contact />
         <Footer />
-        <MobileFAB />
       </div>
     );
   }
@@ -94,8 +92,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Kept outside the stacking contexts so it remains floating above all */}
-      <MobileFAB />
     </div>
   );
 };
