@@ -5,6 +5,7 @@ const About = () => {
 
   const skills = {
     fullstack: [
+      "C++",
       "React",
       "Node.js",
       "Express.js",
@@ -15,7 +16,6 @@ const About = () => {
       "REST API Design",
     ],
     ml: [
-      "C++",
       "Python",
       "TensorFlow",
       "PyTorch",
@@ -43,9 +43,9 @@ const About = () => {
           {/* Left Content */}
           <div className={`space-y-8 ${aboutVisible ? "scroll-animate" : ""}`}>
             <div>
-              <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
+              {/* <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
                 About Me
-              </p>
+              </p> */}
               <h2 className="text-5xl font-bold mb-8">My background</h2>
             </div>
 
@@ -53,21 +53,31 @@ const About = () => {
               <p>
                 I'm a{" "}
                 <span className="font-bold text-black dark:text-white">
-                  Pre Final Year Student
+                  Final Year Computer Science Engineering Student
                 </span>{" "}
-                at Thapar Institute of Engineering & Technology. I've gained
-                hands-on experience as a Software Engineering Intern at
-                SafeSpace, where I developed advanced multimodal stress
-                detection systems.
+                at Thapar Institute of Engineering & Technology. I'm a
+                full-stack developer with experience in building scalable
+                and secure systems. I've gained hands-on experience as a
+                Software Engineering Intern at Thapar University, where I
+                developed advanced multimodal stress detection systems.
               </p>
 
               <p>
                 My work lies at the intersection of high-performance software
-                engineering and applied AI. I've built distributed in-memory
-                caches achieving 680k+ ops/sec and full-stack platforms like
-                VerifyHub that automate verification for thousands of users. I
-                am passionate about building scalable, secure, and intelligent
-                systems.
+                engineering and applied AI. I've built full stack platforms like
+                VerifyHub, engineering a serverless verification system that has
+                processed{" "}
+                <span className="font-bold text-black dark:text-white">
+                  12,994+ project submissions{" "}
+                </span>
+                for 497+ students, delivering
+                sub-{" "}
+                <span className="font-bold text-black dark:text-white">
+                  5 second{" "}
+                </span>
+                verification through automated scraping, real-time
+                validation, and scalable backend workflows. I am passionate about
+                building scalable, secure, and intelligent systems.
               </p>
 
               <p>

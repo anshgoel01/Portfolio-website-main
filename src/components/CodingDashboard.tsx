@@ -40,6 +40,13 @@ interface ContributionDay {
   count: number;
 }
 
+interface RatingHistoryEntry {
+  date: string;
+  rating: number;
+  name?: string;
+  rank?: number;
+}
+
 interface CodolioStats {
   totalSolved: number;
   rank: number;
@@ -50,6 +57,8 @@ interface CodolioStats {
   easySolved?: number;
   mediumSolved?: number;
   hardSolved?: number;
+  ratingHistory?: RatingHistoryEntry[];
+  latestBadge?: { id: string; name: string; icon: string } | null;
   lastUpdated: string;
 }
 
@@ -79,6 +88,7 @@ const CodingDashboard = () => {
   const [ghError, setGhError] = useState<string | null>(null);
   const [retrying, setRetrying] = useState(false);
   const [codolioStats, setCodolioStats] = useState<CodolioStats | null>(null);
+  const [latestBadge, setLatestBadge] = useState<{ icon: string; name: string; id: string } | null>(null);
 
   // Platform usernames (allow overriding via Vite env variables)
   const LEETCODE_USER =
@@ -124,15 +134,23 @@ const CodingDashboard = () => {
       return;
     }
 
-    if (typeof codolioStats.rating === "number") {
+    // Prefer the full ratingHistory array scraped from LeetCode contest history
+    if (Array.isArray(codolioStats.ratingHistory) && codolioStats.ratingHistory.length > 0) {
+      setRatingData(
+        codolioStats.ratingHistory.map((entry) => ({
+          date: entry.date,
+          rating: entry.rating,
+          name: entry.name,
+          rank: entry.rank,
+        }))
+      );
+    } else if (typeof codolioStats.rating === "number") {
+      // Fallback: single data point
       setRatingData([
         {
           date: new Date(codolioStats.lastUpdated).toLocaleDateString(
             undefined,
-            {
-              month: "short",
-              day: "numeric",
-            },
+            { month: "short", day: "numeric" },
           ),
           rating: codolioStats.rating,
         },
@@ -140,6 +158,13 @@ const CodingDashboard = () => {
     } else {
       setRatingData([]);
     }
+  }, [codolioStats]);
+
+  // Read latest badge directly from codolio-stats.json (scraped server-side to avoid CORS)
+  useEffect(() => {
+    if (!codolioStats?.latestBadge) return;
+    const b = codolioStats.latestBadge;
+    setLatestBadge({ icon: b.icon, name: b.name, id: b.id });
   }, [codolioStats]);
 
   useEffect(() => {
@@ -851,9 +876,10 @@ const CodingDashboard = () => {
       color: "text-yellow-500 dark:text-yellow-400",
     },
     {
-      title: "Learning Progress",
-      value: "Active",
-      Icon: Target,
+      title: "Latest Badge",
+      value: latestBadge ? latestBadge.name : "Active",
+      img: latestBadge ? latestBadge.icon : undefined,
+      Icon: !latestBadge ? Target : undefined,
       color: "text-orange-500 dark:text-orange-400",
     },
     {
@@ -941,13 +967,13 @@ const CodingDashboard = () => {
                     <img
                       src={stat.img}
                       alt={stat.title}
-                      className="w-12 h-12 rounded-md object-contain shadow-sm"
+                      className="w-12 h-12 rounded-md object-contain shadow-sm drop-shadow"
                     />
-                  ) : (
+                  ) : stat.Icon ? (
                     <stat.Icon
                       className={`w-8 h-8 ${stat.color} transition-transform duration-300 group-hover:scale-110`}
                     />
-                  )}
+                  ) : null}
                 </div>
               </CardContent>
             </Card>
@@ -1038,49 +1064,68 @@ const CodingDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={200}>
-                <LineChart
-                  data={ratingData}
-                  margin={{ left: 8, right: 32, top: 8, bottom: 24 }}
-                >
-                  {/* compute an interval to avoid overcrowding on small screens */}
-                  {(() => {
-                    const len = (ratingData || []).length;
-                    const maxTicks = chartMaxTicks || 6;
-                    const interval =
-                      len > 0
-                        ? Math.max(0, Math.floor((len - 1) / maxTicks))
-                        : 0;
-                    const isSmall = chartMaxTicks <= 4;
-                    return (
-                      <XAxis
-                        dataKey="date"
-                        stroke="hsl(var(--muted-foreground))"
-                        interval={interval}
-                        padding={{ right: 20 }}
-                        tick={renderXAxisTick}
-                      />
-                    );
-                  })()}
-                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="rating"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={3}
-                    dot={{ fill: "hsl(var(--primary))", r: 4 }}
-                    animationDuration={1000}
-                    animationEasing="ease-out"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
+              {ratingData.length === 0 ? (
+                <div className="flex items-center justify-center h-[220px] text-muted-foreground text-sm">
+                  No rating history available
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height={220}>
+                  <LineChart
+                    data={ratingData}
+                    margin={{ left: 0, right: 24, top: 8, bottom: 32 }}
+                  >
+                    {(() => {
+                      const len = (ratingData || []).length;
+                      const maxTicks = chartMaxTicks || 6;
+                      const interval =
+                        len > 0
+                          ? Math.max(0, Math.floor((len - 1) / maxTicks))
+                          : 0;
+                      return (
+                        <XAxis
+                          dataKey="date"
+                          stroke="hsl(var(--muted-foreground))"
+                          interval={interval}
+                          padding={{ left: 16, right: 16 }}
+                          tick={renderXAxisTick}
+                        />
+                      );
+                    })()}
+                    <YAxis
+                      stroke="hsl(var(--muted-foreground))"
+                      fontSize={12}
+                      width={48}
+                      domain={[
+                        (dataMin: number) => Math.max(0, Math.floor(dataMin * 0.95 / 100) * 100),
+                        (dataMax: number) => Math.ceil(dataMax * 1.05 / 100) * 100,
+                      ]}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "hsl(var(--card))",
+                        border: "1px solid hsl(var(--border))",
+                        borderRadius: "8px",
+                        fontSize: "13px",
+                      }}
+                      formatter={(value: any, name: string, props: any) => [
+                        value,
+                        props?.payload?.name || "Rating",
+                      ]}
+                      labelFormatter={(label) => `Contest: ${label}`}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="rating"
+                      stroke="hsl(var(--primary))"
+                      strokeWidth={3}
+                      dot={{ fill: "hsl(var(--primary))", r: 5, strokeWidth: 2, stroke: "hsl(var(--background))" }}
+                      activeDot={{ r: 7, stroke: "hsl(var(--primary))", strokeWidth: 2 }}
+                      animationDuration={800}
+                      animationEasing="ease-out"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              )}
             </CardContent>
           </Card>
         </div>

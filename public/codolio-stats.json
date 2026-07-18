@@ -1,12 +1,55 @@
 {
-  "totalSolved": 249,
-  "easySolved": 88,
-  "mediumSolved": 134,
-  "hardSolved": 26,
-  "rank": 545,
-  "streak": 40,
-  "rating": 2,
-  "maxStreak": 40,
-  "totalActiveDays": 110,
-  "lastUpdated": "2026-07-06T16:46:08.714Z"
+  "totalSolved": 269,
+  "easySolved": 92,
+  "mediumSolved": 146,
+  "hardSolved": 30,
+  "rank": 3383,
+  "streak": 51,
+  "rating": 1885,
+  "maxStreak": 51,
+  "totalActiveDays": 121,
+  "ratingHistory": [
+    {
+      "date": "22 Nov",
+      "rating": 1415,
+      "name": "Biweekly Contest 170",
+      "rank": 25571
+    },
+    {
+      "date": "6 Jun",
+      "rating": 1556,
+      "name": "Biweekly Contest 184",
+      "rank": 2408
+    },
+    {
+      "date": "7 Jun",
+      "rating": 1719,
+      "name": "Weekly Contest 505",
+      "rank": 424
+    },
+    {
+      "date": "20 Jun",
+      "rating": 1725,
+      "name": "Biweekly Contest 185",
+      "rank": 6312
+    },
+    {
+      "date": "21 Jun",
+      "rating": 1822,
+      "name": "Weekly Contest 507",
+      "rank": 545
+    },
+    {
+      "date": "4 Jul",
+      "rating": 1885,
+      "name": "Biweekly Contest 186",
+      "rank": 811
+    }
+  ],
+  "latestBadge": {
+    "id": "10490173",
+    "name": "Top SQL 50",
+    "icon": "https://assets.leetcode.com/static_assets/others/Top_SQL_50.png"
+  },
+  "lastUpdated": "2026-07-18T17:34:25.535Z"
 }

@@ -431,24 +431,209 @@ async function tryFetchFallback() {
   return parsed;
 }
 
+async function fetchLeetCodeBadge(leetcodeUsername) {
+  const query = `
+    query getUserProfile($username: String!) {
+      matchedUser(username: $username) {
+        badges { id name icon displayName }
+      }
+    }
+  `;
+  try {
+    const fetchImpl = globalThis.fetch ?? (await import("node-fetch")).default;
+    const res = await fetchImpl("https://leetcode.com/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Referer": "https://leetcode.com",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+      },
+      body: JSON.stringify({ query, variables: { username: leetcodeUsername } }),
+    });
+    if (!res.ok) {
+      log("Badge API returned status:", res.status);
+      return null;
+    }
+    const data = await res.json();
+    const badges = data?.data?.matchedUser?.badges || [];
+    if (badges.length === 0) return null;
+    const b = badges[badges.length - 1];
+    const rawIcon = b.icon || "";
+    const iconUrl = rawIcon.startsWith("http")
+      ? rawIcon
+      : `https://leetcode.com${rawIcon}`;
+    log("Latest badge:", b.displayName || b.name, iconUrl);
+    return { id: b.id, name: b.displayName || b.name, icon: iconUrl };
+  } catch (err) {
+    log("Badge fetch failed:", err?.message || err);
+    return null;
+  }
+}
+
+async function tryApiFetch() {
+  const username = EXPECTED_USERNAME;
+  const profileUrl = `https://api.codolio.com/profile?userKey=${username}`;
+  
+  log("Attempting direct API fetch from:", profileUrl);
+  const fetchImpl = globalThis.fetch ?? (await import("node-fetch")).default;
+  const res = await fetchImpl(profileUrl);
+  if (!res.ok) throw new Error(`API status ${res.status}`);
+  const json = await res.json();
+  const data = json.data;
+  if (!data) throw new Error("API returned empty data");
+
+  // Solved counts
+  let totalSolved = 0;
+  let easySolved = 0;
+  let mediumSolved = 0;
+  let hardSolved = 0;
+  const activeDates = new Set();
+  let rating = 0;
+  let ratingHistory = [];
+
+  const platforms = data.platformProfiles?.platformProfiles || [];
+  for (const plat of platforms) {
+    if (plat.totalQuestionStats) {
+      totalSolved += plat.totalQuestionStats.totalQuestionCounts || 0;
+      easySolved += plat.totalQuestionStats.easyQuestionCounts || 0;
+      mediumSolved += plat.totalQuestionStats.mediumQuestionCounts || 0;
+      hardSolved += plat.totalQuestionStats.hardQuestionCounts || 0;
+    }
+
+    if (plat.userStats && typeof plat.userStats.currentRating === "number") {
+      rating = Math.max(rating, plat.userStats.currentRating);
+    }
+
+    if (plat.dailyActivityStatsResponse?.submissionCalendar) {
+      const cal = plat.dailyActivityStatsResponse.submissionCalendar;
+      for (const timestampStr of Object.keys(cal)) {
+        if (cal[timestampStr] > 0) {
+          const date = new Date(Number(timestampStr) * 1000).toISOString().split("T")[0];
+          activeDates.add(date);
+        }
+      }
+    }
+
+    if (plat.contestActivityStats?.contestActivityList) {
+      const list = plat.contestActivityStats.contestActivityList;
+      ratingHistory = list.map((c) => ({
+        date: new Date(c.contestDate * 1000).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+        }),
+        rating: c.rating,
+        name: c.contestName,
+        rank: c.rank,
+      }));
+    }
+  }
+
+  // Streaks
+  const sortedDates = Array.from(activeDates).sort();
+  let currentStreak = 0;
+  let maxStreak = 0;
+  let tempStreak = 0;
+  let lastDate = null;
+
+  const isConsecutive = (d1, d2) => {
+    const diffTime = Math.abs(new Date(d2) - new Date(d1));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= 1;
+  };
+
+  for (const d of sortedDates) {
+    if (!lastDate) {
+      tempStreak = 1;
+    } else if (isConsecutive(lastDate, d)) {
+      tempStreak++;
+    } else {
+      if (tempStreak > maxStreak) {
+        maxStreak = tempStreak;
+      }
+      tempStreak = 1;
+    }
+    lastDate = d;
+  }
+  if (tempStreak > maxStreak) {
+    maxStreak = tempStreak;
+  }
+
+  if (lastDate) {
+    const today = new Date().toISOString().split("T")[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+    if (lastDate === today || lastDate === yesterday) {
+      currentStreak = tempStreak;
+    } else {
+      currentStreak = 0;
+    }
+  }
+
+  // Leaderboard global rank
+  let globalRank = 0;
+  if (data.id) {
+    try {
+      const lbUrl = `https://node.codolio.com/api/leaderboard/v1/get-user-leaderboard?userId=${data.id}`;
+      const lbRes = await fetchImpl(lbUrl);
+      if (lbRes.ok) {
+        const lbJson = await lbRes.json();
+        globalRank = lbJson?.data?.global?.["1"]?.rank || 0;
+      }
+    } catch (e) {
+      log("Leaderboard rank fetch failed:", e.message);
+    }
+  }
+
+  // Fetch latest LeetCode badge (no CORS here - server side)
+  // The LeetCode username is stored in the profile platforms list
+  let latestBadge = null;
+  const leetPlatform = platforms.find(
+    (p) => (p.platformName || "").toLowerCase() === "leetcode"
+  );
+  const leetUsername = leetPlatform?.platformUsername || "anshgoel_012";
+  latestBadge = await fetchLeetCodeBadge(leetUsername);
+
+  log("API fetch successful!");
+  return {
+    totalSolved,
+    easySolved,
+    mediumSolved,
+    hardSolved,
+    rank: globalRank,
+    streak: currentStreak,
+    rating,
+    maxStreak,
+    totalActiveDays: activeDates.size,
+    ratingHistory,
+    latestBadge,
+    lastUpdated: new Date().toISOString(),
+  };
+}
+
 async function main() {
   try {
     let result = null;
 
     try {
-      const attempt = await withRetries(() => tryPuppeteer(), 3, 1000);
-      result = attempt.normalized;
-      // close browser if present
+      // 1. Try API Fetch first (robust, full history)
+      result = await tryApiFetch();
+    } catch (apiErr) {
+      log("API fetch failed, falling back to Puppeteer:", apiErr?.message || apiErr);
+
+      // 2. Try Puppeteer fallback
       try {
-        if (attempt.browser) await attempt.browser.close();
-      } catch {}
-    } catch (puppErr) {
-      log(
-        "Puppeteer failed, falling back to fetch parser:",
-        puppErr?.message || puppErr,
-      );
-      // try fetch fallback with retries
-      result = await withRetries(() => tryFetchFallback(), 2, 1000);
+        const attempt = await withRetries(() => tryPuppeteer(), 3, 1000);
+        result = attempt.normalized;
+        try {
+          if (attempt.browser) await attempt.browser.close();
+        } catch {}
+      } catch (puppErr) {
+        log(
+          "Puppeteer failed, falling back to fetch parser:",
+          puppErr?.message || puppErr,
+        );
+        // 3. Try fetch fallback with retries
+        result = await withRetries(() => tryFetchFallback(), 2, 1000);
+      }
     }
 
     if (!result || Number(result.totalSolved) === 0) {
@@ -483,3 +668,4 @@ async function main() {
 }
 
 await main();
+
