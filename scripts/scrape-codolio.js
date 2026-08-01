@@ -614,29 +614,82 @@ async function tryApiFetch() {
 }
 
 /**
- * Fetch GitHub contribution data via the public events API.
- * No token required. Only covers the last ~90 days but is CORS-free and reliable.
- * For a full year of data a GitHub token would be needed (GraphQL API).
+ * Fetch GitHub contribution data for the past year.
+ *
+ * Primary:  GitHub GraphQL contributionCalendar API (requires GITHUB_TOKEN).
+ *           Returns the exact same data shown on the GitHub profile page (full year).
+ * Fallback: GitHub public events API (~90 days, no token required).
  */
 async function fetchGitHubContributions(githubUser) {
+  const fetchImpl = globalThis.fetch ?? (await import("node-fetch")).default;
+
+  // ── Primary path: GraphQL (full year, matches GitHub profile exactly) ──────
+  if (process.env.GITHUB_TOKEN) {
+    try {
+      const query = `
+        query($login: String!) {
+          user(login: $login) {
+            contributionsCollection {
+              contributionCalendar {
+                totalContributions
+                weeks {
+                  contributionDays {
+                    date
+                    contributionCount
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
+      const res = await fetchImpl("https://api.github.com/graphql", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.GITHUB_TOKEN}`,
+          "Content-Type": "application/json",
+          "User-Agent": "portfolio-scraper",
+        },
+        body: JSON.stringify({ query, variables: { login: githubUser } }),
+      });
+
+      if (!res.ok) throw new Error(`GraphQL HTTP ${res.status}`);
+      const json = await res.json();
+      if (json.errors) throw new Error(json.errors[0]?.message || "GraphQL error");
+
+      const calendar = json?.data?.user?.contributionsCollection?.contributionCalendar;
+      if (!calendar) throw new Error("No calendar data in GraphQL response");
+
+      // Flatten weeks → days, keep every day (even count=0 days so the heatmap renders properly)
+      const contributions = calendar.weeks
+        .flatMap((w) => w.contributionDays)
+        .map((d) => ({ date: d.date, count: d.contributionCount }));
+
+      log(`GitHub contributions (GraphQL): ${calendar.totalContributions} total, ${contributions.length} days fetched`);
+      return contributions;
+    } catch (err) {
+      log("GitHub GraphQL fetch failed, falling back to events API:", err?.message || err);
+    }
+  } else {
+    log("No GITHUB_TOKEN found — falling back to public events API (~90 days only)");
+  }
+
+  // ── Fallback path: public events API (~90 days, no token needed) ─────────
   try {
-    const fetchImpl = globalThis.fetch ?? (await import("node-fetch")).default;
     const perPage = 100;
     let page = 1;
-    const maxPages = 3; // up to 300 events (~90 days)
+    const maxPages = 3;
     const allEvents = [];
 
     while (page <= maxPages) {
       const url = `https://api.github.com/users/${githubUser}/events/public?per_page=${perPage}&page=${page}`;
-      const headers = { "User-Agent": "portfolio-scraper" };
-      if (process.env.GITHUB_TOKEN) headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
-      const r = await fetchImpl(url, { headers });
+      const r = await fetchImpl(url, { headers: { "User-Agent": "portfolio-scraper" } });
       if (!r.ok) { log("GitHub events API status:", r.status); break; }
       const ev = await r.json();
       if (!Array.isArray(ev) || ev.length === 0) break;
       allEvents.push(...ev);
       if (ev.length < perPage) break;
-      page += 1;
+      page++;
     }
 
     const contribTypes = ["PushEvent", "PullRequestEvent", "IssuesEvent", "PullRequestReviewEvent", "IssueCommentEvent", "CreateEvent"];
@@ -648,13 +701,14 @@ async function fetchGitHubContributions(githubUser) {
     });
 
     const contributions = Object.keys(dateCounts).map((date) => ({ date, count: dateCounts[date] }));
-    log(`GitHub contributions: ${contributions.length} active days fetched`);
+    log(`GitHub contributions (events API fallback): ${contributions.length} active days fetched`);
     return contributions;
   } catch (err) {
     log("GitHub contributions fetch failed:", err?.message || err);
     return [];
   }
 }
+
 
 async function main() {
   try {
