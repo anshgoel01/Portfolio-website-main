@@ -59,6 +59,7 @@ interface CodolioStats {
   hardSolved?: number;
   ratingHistory?: RatingHistoryEntry[];
   latestBadge?: { id: string; name: string; icon: string } | null;
+  githubContributions?: Array<{ date: string; count: number }>;
   lastUpdated: string;
 }
 
@@ -167,492 +168,62 @@ const CodingDashboard = () => {
     setLatestBadge({ icon: b.icon, name: b.name, id: b.id });
   }, [codolioStats]);
 
+  // Load GitHub contributions from the static codolio-stats.json (scraped daily server-side).
+  // This avoids all CORS issues with third-party APIs. If the JSON has no data yet,
+  // fall back to the GitHub public events API as a last resort.
   useEffect(() => {
-    // Fetch GitHub contributions
-    // Fetch GitHub contributions
-    const fetchGitHubContributions = async () => {
+    if (!codolioStats) return;
+
+    // Primary: read from the pre-fetched JSON
+    if (Array.isArray(codolioStats.githubContributions) && codolioStats.githubContributions.length > 0) {
+      setContributions(codolioStats.githubContributions);
+      setGhError(null);
+      setLoading(false);
+      return;
+    }
+
+    // Fallback: live fetch from GitHub public events API (no auth needed, ~90 days)
+    const fetchFallback = async () => {
       try {
         setGhError(null);
-        const githubUrl = `https://github-contributions-api.deno.dev/${GITHUB_USER}.json`;
-        const response = await fetch(githubUrl);
-        if (!response.ok) throw new Error(`Status ${response.status}`);
-        const data = await response.json();
-
-        // normalize shapes - the deno API sometimes returns weeks (array of arrays)
-        let rawContribs: any[] = [];
-        if (data && Array.isArray(data.contributions)) {
-          // contributions may be nested by week -> flatten if needed
-          rawContribs = data.contributions.some(Array.isArray)
-            ? (data.contributions as any[]).flat()
-            : data.contributions;
-        } else if (Array.isArray(data.data)) {
-          rawContribs = data.data;
-        } else if (Array.isArray((data || {}).years)) {
-          // some APIs wrap contributions by year
-          rawContribs = (data.years || []).flatMap(
-            (y: any) => y.contributions || [],
-          );
-        }
-
-        const formattedContributions = (rawContribs || []).map(
-          (contrib: any) => ({
-            date: contrib.date,
-            count: contrib.count ?? contrib.contributionCount ?? 0,
-            // preserve optional fields for richer hovers without extra API calls
-            color: contrib.color,
-            contributionLevel: contrib.contributionLevel,
-          }),
-        );
-
-        // caching: store normalized result in localStorage for 1 hour to reduce repeat requests
-        try {
-          const cacheKey = `ghContribs:${GITHUB_USER}`;
-          if (formattedContributions.length > 0) {
-            localStorage.setItem(
-              cacheKey,
-              JSON.stringify({ ts: Date.now(), data: formattedContributions }),
-            );
-            setContributions(formattedContributions);
-            setGhError(null);
-          } else {
-            // no data - try a public events fallback next
-            setGhError(
-              "No direct contributions data available from the 3rd-party API; attempting GitHub events fallback.",
-            );
-            try {
-              const fallback = await fetchGitHubEventsFallback(GITHUB_USER);
-              if (fallback && fallback.length > 0) {
-                localStorage.setItem(
-                  cacheKey,
-                  JSON.stringify({ ts: Date.now(), data: fallback }),
-                );
-                setContributions(fallback);
-                setGhError(null);
-              }
-            } catch (err) {
-              if (isDev) console.error("fallback error", err);
-            }
-          }
-        } catch (err) {
-          if (isDev) console.warn("localStorage unavailable", err);
-        }
-      } catch (error: any) {
-        if (isDev) console.error("Error fetching GitHub contributions:", error);
-        setGhError(String(error?.message || error));
-      } finally {
-        setLoading(false);
-        setRetrying(false);
-      }
-    };
-
-    // check cache first
-    try {
-      const cacheKey = `ghContribs:${GITHUB_USER}`;
-      const cachedRaw = localStorage.getItem(cacheKey);
-      if (cachedRaw) {
-        const parsed = JSON.parse(cachedRaw);
-        const age = Date.now() - (parsed.ts || 0);
-        const ttl = 1000 * 60 * 60; // 1 hour
-        if (age < ttl && Array.isArray(parsed.data)) {
-          setContributions(parsed.data);
-          setLoading(false);
-        } else {
-          // stale - fetch fresh
-          fetchGitHubContributions();
-        }
-      } else {
-        fetchGitHubContributions();
-      }
-    } catch (err) {
-      // localStorage not available or parse failed - just fetch
-      fetchGitHubContributions();
-    }
-
-    // Attach mouse handlers for custom tooltip (reads data- attributes set on rects)
-    let container = heatmapRef.current;
-    // debug toggle: set VITE_HEATMAP_TOOLTIP_DEBUG=true or set localStorage 'heatmapTooltipDebug' = '1'
-    const envDebug =
-      (import.meta as any).env?.VITE_HEATMAP_TOOLTIP_DEBUG === "true";
-    let runtimeDebug = false;
-    try {
-      runtimeDebug =
-        typeof window !== "undefined" &&
-        localStorage.getItem("heatmapTooltipDebug") === "1";
-    } catch (e) {}
-    const debug = isDev && (envDebug || runtimeDebug);
-    // expose a quick toggle helper for local debugging
-    try {
-      if (typeof window !== "undefined") {
-        (window as any).__toggleHeatmapTooltipDebug = (v?: boolean) => {
-          const val =
-            v === undefined
-              ? !(localStorage.getItem("heatmapTooltipDebug") === "1")
-              : !!v;
-          localStorage.setItem("heatmapTooltipDebug", val ? "1" : "0");
-          // eslint-disable-next-line no-console
-          if (isDev)
-            console.log(
-              "[heatmap-debug] set heatmapTooltipDebug =",
-              val ? "1" : "0",
-            );
-        };
-      }
-    } catch (e) {}
-    if (container) {
-      // Use pointer events for wider device support and more reliable targeting.
-      // Structured in-memory log for debugging interactions
-      try {
-        if (typeof window !== "undefined") {
-          (window as any).__heatmapTooltipLog =
-            (window as any).__heatmapTooltipLog || [];
-          (window as any).__dumpHeatmapTooltipLog = () =>
-            JSON.parse(
-              JSON.stringify((window as any).__heatmapTooltipLog || []),
-            );
-        }
-      } catch (e) {}
-
-      const pushLog = (entry: any) => {
-        if (!debug) return;
-        try {
-          const rec = { ts: Date.now(), ...entry };
-          (window as any).__heatmapTooltipLog.push(rec);
-          if (isDev) console.debug("[heatmap-debug]", rec);
-        } catch (e) {
-          // ignore logging errors
-        }
-      };
-
-      const adjust = (opts?: {
-        retries?: number;
-        anchorX?: number;
-        anchorY?: number;
-      }) => {
-        if (!tooltipRef.current || !container) return;
-        const tt = tooltipRef.current;
-        const bounds = container.getBoundingClientRect();
-        const ttW = tt.offsetWidth;
-        const ttH = tt.offsetHeight;
-        pushLog({
-          event: "adjust",
-          ttW,
-          ttH,
-          bounds: { w: bounds.width, h: bounds.height },
-          opts,
-        });
-
-        // If tooltip hasn't been painted yet, retry a few times (double RAF + setTimeout fallback)
-        const retries = opts?.retries ?? 0;
-        if ((ttW === 0 || ttH === 0) && retries < 3) {
-          pushLog({ event: "adjust-retry", retries });
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() =>
-              adjust({
-                retries: retries + 1,
-                anchorX: opts?.anchorX,
-                anchorY: opts?.anchorY,
-              }),
-            ),
-          );
-          // also schedule a timed fallback in case RAFs don't help
-          setTimeout(
-            () =>
-              adjust({
-                retries: retries + 1,
-                anchorX: opts?.anchorX,
-                anchorY: opts?.anchorY,
-              }),
-            16 + retries * 10,
-          );
-          return;
-        }
-
-        setTooltip((prev) => {
-          if (!prev.visible) return prev;
-          let left = (opts?.anchorX ?? prev.x) + 12;
-          let top = (opts?.anchorY ?? prev.y) + 12;
-          // flip horizontally if overflowing container width
-          if (left + ttW > bounds.width) {
-            left = Math.max((opts?.anchorX ?? prev.x) - ttW - 12, 8);
-            pushLog({ event: "flip-left", left });
-          }
-          // flip vertically if overflowing container height
-          if (top + ttH > bounds.height) {
-            top = Math.max(bounds.height - ttH - 8, 8);
-            pushLog({ event: "flip-top", top });
-          }
-          return { ...prev, left, top };
-        });
-      };
-
-      const resolveCellFromEvent = (e: PointerEvent) => {
-        // Try several ways to resolve the SVG cell element that holds data attributes
-        try {
-          // 1) composedPath (best for shadow DOM / SVG nesting)
-          const cp: any[] =
-            typeof (e as any).composedPath === "function"
-              ? (e as any).composedPath()
-              : [];
-          for (const el of cp || []) {
-            if (!el || !(el as Element).getAttribute) continue;
-            if (
-              (el as Element).hasAttribute &&
-              (el as Element).hasAttribute("data-date")
-            )
-              return { el: el as Element, method: "composedPath" };
-          }
-
-          // 2) closest on target
-          const target = e.target as Element | null;
-          if (target) {
-            const closestRect = target.closest
-              ? target.closest("[data-date]")
-              : null;
-            if (closestRect)
-              return { el: closestRect as Element, method: "closest" };
-          }
-
-          // 3) elementFromPoint fallback
-          const fromPoint = document.elementFromPoint(
-            e.clientX,
-            e.clientY,
-          ) as Element | null;
-          if (fromPoint) {
-            const cp2 = (fromPoint as Element).closest
-              ? (fromPoint as Element).closest("[data-date]")
-              : null;
-            if (cp2) return { el: cp2 as Element, method: "elementFromPoint" };
-          }
-        } catch (err) {
-          pushLog({ event: "resolve-error", error: String(err) });
-        }
-        return null;
-      };
-
-      const onPointerMove = (e: PointerEvent) => {
-        const resolved = resolveCellFromEvent(e);
-        if (resolved && resolved.el) {
-          const rectEl = resolved.el as HTMLElement;
-          const date = rectEl.getAttribute("data-date") || "";
-          const count = rectEl.getAttribute("data-count") || "0";
-          const title =
-            rectEl.getAttribute("data-title") ||
-            `${count} contributions on ${date}`;
-          const bounds = container!.getBoundingClientRect();
-          const anchorX = e.clientX - bounds.left;
-          const anchorY = e.clientY - bounds.top;
-          pushLog({
-            event: "pointermove",
-            method: resolved.method,
-            date,
-            count,
-            anchorX,
-            anchorY,
-          });
-
-          // initial guess for left/top; will be adjusted to avoid overflow
-          setTooltip({
-            visible: true,
-            x: anchorX,
-            y: anchorY,
-            left: anchorX + 12,
-            top: anchorY + 12,
-            text: title,
-          });
-
-          // Measurement + adjust with robust retries; pass anchor to adjust so it can retry using it
-          requestAnimationFrame(() =>
-            requestAnimationFrame(() =>
-              adjust({ retries: 0, anchorX, anchorY }),
-            ),
-          );
-        } else {
-          pushLog({
-            event: "pointermove-miss",
-            clientX: e.clientX,
-            clientY: e.clientY,
-          });
-          setTooltip((t) => (t.visible ? { ...t, visible: false } : t));
-        }
-      };
-
-      const onPointerOver = (e: PointerEvent) => {
-        pushLog({ event: "pointerover" });
-        onPointerMove(e);
-      };
-      const onPointerOut = () => {
-        pushLog({ event: "pointerout" });
-        setTooltip((t) => (t.visible ? { ...t, visible: false } : t));
-      };
-
-      container.addEventListener("pointermove", onPointerMove);
-      container.addEventListener("pointerover", onPointerOver);
-      container.addEventListener("pointerout", onPointerOut);
-      const onResize = () => adjust();
-      window.addEventListener("resize", onResize);
-
-      // As a robust fallback: attach per-rect listeners directly to each [data-date] element
-      // This avoids delegation misses caused by SVG nesting or pointer event differences.
-      const attachedRects: Array<{
-        el: Element;
-        handlers: {
-          move: (e: PointerEvent) => void;
-          enter: (e: PointerEvent) => void;
-          leave: (e: PointerEvent) => void;
-        };
-      }> = [];
-
-      const attachPerRectListeners = (attempt = 0) => {
-        try {
-          const nodes = container!.querySelectorAll("[data-date]");
-          if (!nodes || nodes.length === 0) {
-            pushLog({ event: "attach-rects-miss", attempt });
-            if (attempt < 5)
-              setTimeout(
-                () => attachPerRectListeners(attempt + 1),
-                100 + attempt * 50,
-              );
-            return;
-          }
-          pushLog({ event: "attach-rects", count: nodes.length });
-          try {
-            (window as any).__heatmapInitInfo =
-              (window as any).__heatmapInitInfo || {};
-            (window as any).__heatmapInitInfo.lastAttach = Date.now();
-            (window as any).__heatmapInitInfo.lastCount = nodes.length;
-          } catch (e) {}
-          nodes.forEach((n) => {
-            const move = (ev: Event) =>
-              onPointerMove(ev as unknown as PointerEvent);
-            const enter = (ev: Event) =>
-              onPointerOver(ev as unknown as PointerEvent);
-            const leave = () => onPointerOut();
-            n.addEventListener("pointermove", move as EventListener);
-            n.addEventListener("pointerenter", enter as EventListener);
-            n.addEventListener("pointerleave", leave as EventListener);
-            attachedRects.push({
-              el: n,
-              handlers: {
-                move: move as any,
-                enter: enter as any,
-                leave: leave as any,
-              },
-            });
-          });
-        } catch (err) {
-          pushLog({ event: "attach-rects-error", error: String(err) });
-        }
-      };
-
-      // Initial attempt to attach per-rect listeners
-      attachPerRectListeners();
-
-      // Observe mutations within the heatmap container; the SVG may be re-rendered after initial mount.
-      let mo: MutationObserver | null = null;
-      try {
-        if (container && typeof MutationObserver !== "undefined") {
-          mo = new MutationObserver((mutations) => {
-            pushLog({ event: "mutation-observed", count: mutations.length });
-            // re-attach in case nodes were replaced
-            attachPerRectListeners();
-          });
-          mo.observe(container, { childList: true, subtree: true });
-        }
-      } catch (err) {
-        pushLog({ event: "mutation-observer-error", error: String(err) });
-      }
-
-      // clean up on unmount
-      return () => {
-        try {
-          container?.removeEventListener("pointermove", onPointerMove);
-        } catch (e) {}
-        try {
-          container?.removeEventListener("pointerover", onPointerOver);
-        } catch (e) {}
-        try {
-          container?.removeEventListener("pointerout", onPointerOut);
-        } catch (e) {}
-        try {
-          window.removeEventListener("resize", onResize);
-        } catch (e) {}
-        try {
-          // remove per-rect listeners if attached
-          // attachedRects is closed-over; safe to iterate
-          attachedRects.forEach(({ el, handlers }) => {
-            try {
-              el.removeEventListener(
-                "pointermove",
-                handlers.move as EventListener,
-              );
-            } catch (e) {}
-            try {
-              el.removeEventListener(
-                "pointerenter",
-                handlers.enter as EventListener,
-              );
-            } catch (e) {}
-            try {
-              el.removeEventListener(
-                "pointerleave",
-                handlers.leave as EventListener,
-              );
-            } catch (e) {}
-          });
-        } catch (e) {}
-        try {
-          if (mo) mo.disconnect();
-        } catch (e) {}
-      };
-    }
-
-    // helper: fallback that aggregates public events into date counts
-    async function fetchGitHubEventsFallback(user: string) {
-      try {
         const perPage = 100;
         let page = 1;
-        const maxPages = 3; // up to 300 events
+        const maxPages = 3;
         const allEvents: any[] = [];
         while (page <= maxPages) {
-          const url = `https://api.github.com/users/${user}/events/public?per_page=${perPage}&page=${page}`;
+          const url = `https://api.github.com/users/${GITHUB_USER}/events/public?per_page=${perPage}&page=${page}`;
           const r = await fetch(url);
           if (!r.ok) break;
           const ev = await r.json();
           if (!Array.isArray(ev) || ev.length === 0) break;
           allEvents.push(...ev);
           if (ev.length < perPage) break;
-          page += 1;
+          page++;
         }
-
-        // Aggregate by date (YYYY-MM-DD). Count most event types as a contribution.
+        const contribTypes = ["PushEvent", "PullRequestEvent", "IssuesEvent", "PullRequestReviewEvent", "IssueCommentEvent", "CreateEvent"];
         const dateCounts: Record<string, number> = {};
         allEvents.forEach((e: any) => {
           const dt = e.created_at?.slice(0, 10);
-          if (!dt) return;
-          // Optionally filter event types to more contribution-like events
-          const contribTypes = [
-            "PushEvent",
-            "PullRequestEvent",
-            "IssuesEvent",
-            "PullRequestReviewEvent",
-            "IssueCommentEvent",
-            "CreateEvent",
-          ];
-          if (!contribTypes.includes(e.type)) return;
+          if (!dt || !contribTypes.includes(e.type)) return;
           dateCounts[dt] = (dateCounts[dt] || 0) + 1;
         });
-
-        const formatted = Object.keys(dateCounts).map((k) => ({
-          date: k,
-          count: dateCounts[k],
-        }));
-        return formatted;
-      } catch (err) {
-        if (isDev) console.error("GitHub events fallback failed", err);
-        return [];
+        const formatted = Object.keys(dateCounts).map((k) => ({ date: k, count: dateCounts[k] }));
+        if (formatted.length > 0) {
+          setContributions(formatted);
+          setGhError(null);
+        } else {
+          setGhError("No contribution data available.");
+        }
+      } catch (err: any) {
+        setGhError(String(err?.message || err));
+      } finally {
+        setLoading(false);
+        setRetrying(false);
       }
-    }
-  }, []);
+    };
+
+    fetchFallback();
+  }, [codolioStats]);
 
   const _leetEasy = leetcodeStats.easySolved || 0;
   const _leetMed = leetcodeStats.mediumSolved || 0;

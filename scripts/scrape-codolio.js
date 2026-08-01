@@ -592,6 +592,9 @@ async function tryApiFetch() {
   const leetUsername = leetPlatform?.platformUsername || "anshgoel_012";
   latestBadge = await fetchLeetCodeBadge(leetUsername);
 
+  // Fetch GitHub contributions (server-side: no CORS issues)
+  const githubContributions = await fetchGitHubContributions("anshgoel01");
+
   log("API fetch successful!");
   return {
     totalSolved,
@@ -605,8 +608,52 @@ async function tryApiFetch() {
     totalActiveDays: activeDates.size,
     ratingHistory,
     latestBadge,
+    githubContributions,
     lastUpdated: new Date().toISOString(),
   };
+}
+
+/**
+ * Fetch GitHub contribution data via the public events API.
+ * No token required. Only covers the last ~90 days but is CORS-free and reliable.
+ * For a full year of data a GitHub token would be needed (GraphQL API).
+ */
+async function fetchGitHubContributions(githubUser) {
+  try {
+    const fetchImpl = globalThis.fetch ?? (await import("node-fetch")).default;
+    const perPage = 100;
+    let page = 1;
+    const maxPages = 3; // up to 300 events (~90 days)
+    const allEvents = [];
+
+    while (page <= maxPages) {
+      const url = `https://api.github.com/users/${githubUser}/events/public?per_page=${perPage}&page=${page}`;
+      const headers = { "User-Agent": "portfolio-scraper" };
+      if (process.env.GITHUB_TOKEN) headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
+      const r = await fetchImpl(url, { headers });
+      if (!r.ok) { log("GitHub events API status:", r.status); break; }
+      const ev = await r.json();
+      if (!Array.isArray(ev) || ev.length === 0) break;
+      allEvents.push(...ev);
+      if (ev.length < perPage) break;
+      page += 1;
+    }
+
+    const contribTypes = ["PushEvent", "PullRequestEvent", "IssuesEvent", "PullRequestReviewEvent", "IssueCommentEvent", "CreateEvent"];
+    const dateCounts = {};
+    allEvents.forEach((e) => {
+      const dt = e.created_at?.slice(0, 10);
+      if (!dt || !contribTypes.includes(e.type)) return;
+      dateCounts[dt] = (dateCounts[dt] || 0) + 1;
+    });
+
+    const contributions = Object.keys(dateCounts).map((date) => ({ date, count: dateCounts[date] }));
+    log(`GitHub contributions: ${contributions.length} active days fetched`);
+    return contributions;
+  } catch (err) {
+    log("GitHub contributions fetch failed:", err?.message || err);
+    return [];
+  }
 }
 
 async function main() {
