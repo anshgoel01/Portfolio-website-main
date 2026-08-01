@@ -1,13 +1,13 @@
 {
-  "totalSolved": 269,
-  "easySolved": 92,
-  "mediumSolved": 146,
-  "hardSolved": 30,
-  "rank": 3383,
-  "streak": 51,
+  "totalSolved": 283,
+  "easySolved": 98,
+  "mediumSolved": 153,
+  "hardSolved": 31,
+  "rank": 3153,
+  "streak": 0,
   "rating": 1885,
-  "maxStreak": 51,
-  "totalActiveDays": 121,
+  "maxStreak": 55,
+  "totalActiveDays": 131,
   "ratingHistory": [
     {
       "date": "22 Nov",
@@ -51,5 +51,5 @@
     "name": "Top SQL 50",
     "icon": "https://assets.leetcode.com/static_assets/others/Top_SQL_50.png"
   },
-  "lastUpdated": "2026-07-18T17:34:25.535Z"
+  "lastUpdated": "2026-08-01T07:09:03.893Z"
 }

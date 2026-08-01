@@ -1,8 +1,8 @@
-name: Weekly Codolio Stats Update
+name: Daily Codolio Stats Update
 
 on:
   schedule:
-    - cron: "0 0 * * 0" # weekly (Sun 00:00 UTC)
+    - cron: "0 2 * * *" # daily at 02:00 UTC (7:30 AM IST)
   workflow_dispatch:
 
 permissions:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,35 +26,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run scraper
+      - name: Run Codolio scraper
         run: node scripts/scrape-codolio.js
 
-      - id: commit-changes
-        name: Commit changes and push branch
+      - name: Commit and push updated stats
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          BRANCH="update-codolio-stats-${{ github.run_id }}"
-          git checkout -b "$BRANCH"
-          git add public/codolio-stats.json || true
+          git add public/codolio-stats.json
           if git diff --cached --quiet; then
-            echo "No changes to commit"
-            echo "committed=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit — stats are already up to date."
           else
             git commit -m "chore: update Codolio stats [skip ci]"
-            git push --set-upstream origin "$BRANCH"
-            echo "committed=true" >> $GITHUB_OUTPUT
+            git push origin HEAD:main
+            echo "Stats updated and pushed to main."
           fi
-
-      - name: Create Pull Request if there are changes
-        if: steps.commit-changes.outputs.committed == 'true'
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: update-codolio-stats-${{ github.run_id }}
-          commit-message: "chore: update Codolio stats [skip ci]"
-          title: "chore: update Codolio stats"
-          body: |
-            This automated PR updates the Codolio stats JSON file.
-          labels: automated
