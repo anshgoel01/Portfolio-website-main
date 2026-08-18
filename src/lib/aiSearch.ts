@@ -2,9 +2,9 @@
 const RESUME_CONTEXT = `PERSONAL INFORMATION & CONTACT:
 Name: Anshuman Goel
 Role: Computer Science Student
-Education: Pre Final Year Student, CSE, Thapar Institute (CGPA: 7.3)
+Education: Final Year Student, CSE, Thapar Institute (CGPA: 7.5)
 Email: anshg112005@gmail.com
-LinkedIn: linkedin.com/in/anshumangoel
+LinkedIn: linkedin.com/in/anshuman-goel-a31756199
 GitHub: github.com/anshgoel01
 Portfolio: anshumangoel.vercel.app
 PROFESSIONAL SUMMARY:
@@ -22,14 +22,18 @@ Frameworks & Technologies:
 - TensorFlow, PyTorch, Scikit-learn, CNN, DNN, LLM
 - Git, Docker, Vite, Vercel, AWS (Basic)
 PROJECT PORTFOLIO:
-1. Project Verifier
+1. Concord
+   - Multi-agent research platform (FastAPI, LangGraph, PostgreSQL/pgvector, Groq, React)
+   - Cut unnecessary LLM API calls by 65% via intelligent retry logic
+   - Repo: https://github.com/anshgoel01/MultiAgent
+2. Project Verifier
    - Real-time WebSocket leaderboard
-   - Automated validation of 6,000+ submissions
+   - Automated validation of 12,000+ submissions
    - Live: https://projectverifier.vercel.app/
-2. Distributed Cache CPP
+3. Distributed Cache CPP
    - 682,000+ ops/sec with consistent hashing
    - Repo: https://github.com/Pratiikksha/distributed-cache-cpp
-3. Safe Space
+4. Safe Space
    - Multimodal stress detection
    - Repo: https://github.com/anshgoel01/safe-space
 ACHIEVEMENTS & LEADERSHIP:
@@ -55,14 +59,14 @@ const fallbackResponses: Record<string, string> = {
   "work style": "I thrive in collaborative environments, following agile methodologies with a strong emphasis on clean code, documentation, and code reviews. I'm detail-oriented and focused on building scalable systems.",
   "experience": "As a Software Engineering Intern at SafeSpace, I developed a multimodal stress detection system with 94.1% accuracy and designed a novel Agreement-Aware Fusion algorithm.",
   "skills": "I'm proficient in C++, Python, JavaScript/TypeScript, and SQL. My expertise includes React, Node.js, Express, Supabase, TensorFlow, and PyTorch, with experience in distributed systems and AI.",
-  "education": "I'm a Pre Final Year Student at Thapar Institute, maintaining a 7.3 CGPA and actively participating in technical societies.",
-  "projects": "My portfolio features Project Verifier, a student verification portal for 6,000+ users, Distributed Cache CPP achieving 682,000+ ops/sec, and Safe Space AI.",
-  "contact": "You can reach me at anshg112005@gmail.com, connect on LinkedIn (linkedin.com/in/anshumangoel), or check out my work on GitHub (github.com/anshgoel01).",
+  "education": "I'm a Final Year Student at Thapar Institute, maintaining a 7.5 CGPA and actively participating in technical societies.",
+  "projects": "My portfolio features Concord, a multi-agent research platform built with LangGraph and pgvector RAG, Project Verifier, a student verification portal for 12,000+ submissions, Distributed Cache CPP achieving 682,000+ ops/sec, and Safe Space AI.",
+  "contact": "You can reach me at anshg112005@gmail.com, connect on LinkedIn (linkedin.com/in/anshuman-goel-a31756199), or check out my work on GitHub (github.com/anshgoel01).",
   "achievements": "I won the Innovation Award at the Cyber AI Hackathon 2025 and hold leadership roles as Head of Logistics in Mudra and MUN societies at Thapar Institute.",
   "leadership": "As Head of Logistics for Mudra and MUN societies, I've managed events for 1000+ attendees and optimized resource allocation, reducing costs by 20%.",
   "availability": "I'm open to SDE and AI/ML internship or full-time opportunities where I can apply my skills in software engineering and AI.",
-  "text": "You can reach me through my website (anshumangoel.vercel.app), LinkedIn (linkedin.com/in/anshumangoel), or email (anshg112005@gmail.com).",
-  "contact information": "Feel free to reach out via email at anshg112005@gmail.com or connect with me on LinkedIn at linkedin.com/in/anshumangoel.",
+  "text": "You can reach me through my website (anshumangoel.vercel.app), LinkedIn (linkedin.com/in/anshuman-goel-a31756199), or email (anshg112005@gmail.com).",
+  "contact information": "Feel free to reach out via email at anshg112005@gmail.com or connect with me on LinkedIn at linkedin.com/in/anshuman-goel-a31756199.",
 };
 
 function getFallbackResponse(query: string): string | null {

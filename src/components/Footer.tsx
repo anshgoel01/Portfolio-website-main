@@ -21,11 +21,11 @@ const Footer = () => {
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-white">anshuman.codes</h3>
             <p className="text-gray-400">
-              Building intelligent systems where AI meets full stack development. Pre Final Year Student at Thapar Institute.
+              Building intelligent systems where AI meets full stack development. Final Year Student at Thapar Institute.
             </p>
             <div className="flex gap-3">
               <a
-                href="https://linkedin.com/in/anshumangoel"
+                href="https://www.linkedin.com/in/anshuman-goel-a31756199/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all"
@@ -93,7 +93,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-gray-400">
-              © 2025 Anshuman Goel. All rights reserved.
+              © 2026 Anshuman Goel. All rights reserved.
             </p>
             <div className="flex gap-6 text-xs text-gray-400">
               <span className="flex items-center gap-2">

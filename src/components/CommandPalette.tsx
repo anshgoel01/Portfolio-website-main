@@ -55,12 +55,20 @@ const CommandPalette = () => {
 
   const projectsData = [
     {
+      id: "concord",
+      title: "Concord",
+      description: "Multi-agent research platform coordinating AI agents via LangGraph",
+      category: "project" as const,
+      icon: <Briefcase className="mr-2 h-4 w-4" />,
+      action: () => window.open("https://github.com/anshgoel01/MultiAgent", "_blank")
+    },
+    {
       id: "project-verifier",
       title: "Project Verifier",
       description: "Full-stack verification platform with real-time WebSocket leaderboard",
       category: "project" as const,
       icon: <Briefcase className="mr-2 h-4 w-4" />,
-      action: () => window.open("https://github.com/anshgoel01/VerifyHub", "_blank")
+      action: () => window.open("https://github.com/anshgoel01/project_verify_main", "_blank")
     },
     {
       id: "distributed-cache-cpp",
@@ -357,7 +365,7 @@ const CommandPalette = () => {
             <span>View GitHub</span>
           </CommandItem>
           <CommandItem onSelect={() => {
-            window.open("https://linkedin.com/in/anshumangoel", "_blank");
+            window.open("https://www.linkedin.com/in/anshuman-goel-a31756199/", "_blank");
             setOpen(false);
           }}>
             <Linkedin className="mr-2 h-4 w-4" />

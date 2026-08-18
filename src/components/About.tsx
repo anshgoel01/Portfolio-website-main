@@ -4,35 +4,55 @@ const About = () => {
   const { ref: aboutRef, isVisible: aboutVisible } = useScrollAnimation();
 
   const skills = {
-    fullstack: [
+    languages: [
+      "Java",
+      "Python",
       "C++",
+      "JavaScript",
+      "TypeScript",
+      "SQL",
+      "HTML",
+      "CSS",
+    ],
+    webdev: [
       "React",
       "Node.js",
       "Express.js",
-      "TypeScript",
-      "Supabase",
+      "FastAPI",
+      "Flask",
+      "Tailwind CSS",
+      "REST APIs",
+      "WebSockets",
+      "JWT Authentication",
+    ],
+    databases: [
       "PostgreSQL",
+      "MySQL",
       "MongoDB",
-      "REST API Design",
-    ],
-    ml: [
-      "Python",
-      "TensorFlow",
-      "PyTorch",
-      "Scikit-learn",
-      "NumPy",
-      "Pandas",
-      "Computer Vision",
-      "Deep Learning",
-    ],
-    tools: [
+      "Redis",
+      "Supabase",
+      "pgvector",
+      "Docker",
+      "AWS",
       "Git",
       "GitHub",
-      "Docker",
-      "Postman",
-      "Vite",
-      "Vercel",
-      "AWS",
+    ],
+    ai: [
+      "LangGraph",
+      "TensorFlow",
+      "PyTorch",
+      "Whisper",
+      "Matplotlib",
+      "Plotly",
+    ],
+    coreCs: [
+      "Data Structures & Algorithms",
+      "OOP",
+      "Operating Systems",
+      "DBMS",
+      "Computer Networks",
+      "System Design (LLD)",
+      "Agile Methodologies",
     ],
   };
 
@@ -58,7 +78,7 @@ const About = () => {
                 at Thapar Institute of Engineering & Technology. I'm a
                 full-stack developer with experience in building scalable
                 and secure systems. I've gained hands-on experience as a
-                Software Engineering Intern at Thapar University, where I
+                Software Engineering Intern at SafeSpace, where I
                 developed advanced multimodal stress detection systems.
               </p>
 
@@ -68,9 +88,9 @@ const About = () => {
                 VerifyHub, engineering a serverless verification system that has
                 processed{" "}
                 <span className="font-bold text-black dark:text-white">
-                  12,994+ project submissions{" "}
+                  12,000+ project submissions
                 </span>
-                for 497+ students, delivering
+                , delivering
                 sub-{" "}
                 <span className="font-bold text-black dark:text-white">
                   5 second{" "}
@@ -98,56 +118,29 @@ const About = () => {
             <h3 className="text-2xl font-bold mb-8">Skills & Expertise</h3>
 
             <div className="space-y-8">
-              {/* Software & Full-Stack Development */}
-              <div>
-                <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
-                  Software & Full-Stack Development
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {skills.fullstack.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+              {[
+                { heading: "Languages", items: skills.languages },
+                { heading: "Web Development", items: skills.webdev },
+                { heading: "Databases & Tools", items: skills.databases },
+                { heading: "AI & ML", items: skills.ai },
+                { heading: "Core CS", items: skills.coreCs },
+              ].map(({ heading, items }) => (
+                <div key={heading}>
+                  <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                    {heading}
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {items.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              {/* Machine Learning & Computer Vision */}
-              <div>
-                <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
-                  Machine Learning & Computer Vision
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {skills.ml.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Developer Tools & Ecosystem */}
-              <div>
-                <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
-                  Developer Tools & Ecosystem
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {skills.tools.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

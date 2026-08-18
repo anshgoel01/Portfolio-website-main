@@ -32,21 +32,64 @@ export interface Project {
 
 export const projectsData: Project[] = [
   {
+    id: "concord",
+    title: "Concord",
+    description: "A multi-agent research platform where a coordinated team of AI agents collaborates via LangGraph to turn a query into a structured, cited report.",
+    fullDescription: "Built Concord, a multi-agent research platform on a 3-service microservice architecture (gateway, task-service, agent-orchestrator) that turns a single research query into a structured, cited report. A LangGraph StateGraph coordinates six specialized agents — Supervisor, Planner, Retriever, WebSearch, Analyst, and Writer — sharing a single typed state object, with Retriever and WebSearch running in parallel. Retrieval is backed by a PostgreSQL + pgvector RAG pipeline over sentence-transformer embeddings, combined with live web results from the Tavily API and reasoning from Groq's Llama 3.3 70B. Task status and the final report stream to a React frontend in real time via Server-Sent Events. Intelligent retry logic and intent-aware follow-up handling cut unnecessary LLM API calls by 65%, and the whole stack runs through Docker Compose.",
+    image: "/projects/ss/concord.svg",
+    images: ["/projects/ss/concord.svg"],
+    tags: ["FastAPI", "LangGraph", "PostgreSQL", "pgvector", "React"],
+    techStack: ["FastAPI", "LangGraph", "PostgreSQL", "pgvector", "Groq (Llama 3.3 70B)", "Tavily API", "sentence-transformers", "Docker Compose", "React", "Server-Sent Events"],
+    category: "ai-ml",
+    featured: true,
+    githubUrl: "https://github.com/anshgoel01/MultiAgent",
+    features: [
+      "Multi-agent orchestration via a LangGraph StateGraph",
+      "Parallel document retrieval (pgvector RAG) and live web search (Tavily)",
+      "Shared typed state object merged automatically across parallel agent branches",
+      "Real-time progress streaming to the frontend via SSE",
+      "3-service microservice architecture, independently deployable via Docker Compose",
+      "Optional CriticAgent feedback loop that routes back to retrieval when findings are thin",
+      "Intelligent retry logic and intent-aware follow-up handling to cut redundant LLM calls"
+    ],
+    challenges: [
+      "Coordinating agent execution order and shared state across parallel LangGraph branches",
+      "Wiring a RAG pipeline (chunking, embedding, cosine search) on pgvector from scratch",
+      "Streaming multi-stage task progress across service boundaries with SSE"
+    ],
+    metrics: [
+      { value: "65%", label: "Fewer Redundant LLM Calls" },
+      { value: "6", label: "Specialized Agents" },
+      { value: "3", label: "Independent Microservices" }
+    ],
+    implementation: {
+      approach: "Split the backend into gateway, task-service, and agent-orchestrator FastAPI services communicating over REST, each independently deployable via Docker. Agents are wired as nodes in a LangGraph StateGraph, reading and writing a shared ResearchState.",
+      technologies: [
+        { name: "LangGraph", reason: "Gives explicit control over agent execution order, parallel branches, and conditional feedback loops (e.g. Critic routing back to Retriever)." },
+        { name: "pgvector", reason: "Enables cosine-similarity document retrieval directly in PostgreSQL without a separate vector database." },
+        { name: "Groq", reason: "Low-latency inference for Llama 3.3 70B powers all reasoning agents." }
+      ]
+    },
+    documentation: {
+      setup: "Run via Docker Compose (postgres, task-service, agent-orchestrator, gateway); requires GROQ_API_KEY and TAVILY_API_KEY."
+    }
+  },
+  {
     id: "project-verifier",
     title: "Project Verifier",
-    description: "A full-stack verification platform with a real-time WebSocket leaderboard, automating validation of 6,000+ student submissions.",
-    fullDescription: "Built Project Verifier (formerly VerifyHub), a full-stack verification platform with a real-time WebSocket leaderboard, automating validation of 6,000+ student submissions and reducing manual verification effort by over 90%. Developed serverless Deno Edge Functions with parallel async scraping and a custom Jaccard set-intersection fuzzy name-matching algorithm, achieving automated identity resolution across Coursera and LinkedIn. Secured backend against SSRF, IP spoofing, and JWT replay attacks via strict hostname allowlisting, user ID-based rate limiting, and idempotent DB update logic in a TypeScript/Supabase stack.",
+    description: "A full-stack verification platform with a real-time WebSocket leaderboard, automating validation of 12,000+ student submissions.",
+    fullDescription: "Built Project Verifier (formerly VerifyHub), a full-stack verification platform with a real-time WebSocket leaderboard, automating validation of 12,000+ student submissions and reducing manual verification effort by over 90%. Developed serverless Deno Edge Functions with parallel async scraping and a custom Jaccard set-intersection fuzzy name-matching algorithm, achieving automated identity resolution across Coursera and LinkedIn. Secured backend against SSRF, IP spoofing, and JWT replay attacks via strict hostname allowlisting, user ID-based rate limiting, and idempotent DB update logic in a TypeScript/Supabase stack.",
     image: "/projects/ss/verifyhub.png",
     images: ["/projects/ss/verifyhub.png"],
     tags: ["React", "TypeScript", "Supabase", "PostgreSQL", "Deno"],
     techStack: ["React", "TypeScript", "Supabase", "PostgreSQL", "Deno Edge Functions", "WebSockets"],
     category: "web",
     featured: true,
-    githubUrl: "https://github.com/anshgoel01/VerifyHub",
+    githubUrl: "https://github.com/anshgoel01/project_verify_main",
     liveUrl: "https://projectverifier.vercel.app/",
     features: [
       "Real-time WebSocket leaderboard",
-      "Automated validation of 6,000+ submissions",
+      "Automated validation of 12,000+ submissions",
       "Deno Edge Functions for parallel scraping",
       "Custom Jaccard fuzzy name-matching",
       "Secure backend against common attacks",
@@ -58,7 +101,7 @@ export const projectsData: Project[] = [
       "Managing high-concurrency WebSocket connections for the leaderboard"
     ],
     metrics: [
-      { value: "6,000+", label: "Submissions Validated" },
+      { value: "12,000+", label: "Submissions Validated" },
       { value: "90%", label: "Effort Reduction" },
       { value: "95%+", label: "Identity Resolution Accuracy" }
     ],

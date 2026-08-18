@@ -2,23 +2,22 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 
 const TechStackScroller = () => {
   const { ref: scrollerRef, isVisible: scrollerVisible } = useScrollAnimation();
-  const techStack = [
-    "React.js",
-    "Node.js",
-    "Docker",
-    "Python",
-    "MySQL",
-    "MongoDB",
-    "TailwindCSS",
-    "Docker",
-    "Next.js",
-    "JavaScript",
-    "Node.js",
+  const coreStack = [
+    "C++",
     "Python",
     "TypeScript",
-    "TailwindCSS",
-    "Next.js",
+    "React",
+    "Node.js",
+    "FastAPI",
+    "LangGraph",
+    "PostgreSQL",
+    "Docker",
+    "TensorFlow",
+    "AWS",
+    "MongoDB",
   ];
+  // Duplicated once so the 50%-width scroll animation loops seamlessly.
+  const techStack = [...coreStack, ...coreStack];
 
   return (
     <section ref={scrollerRef} className={`py-16 bg-foreground dark:bg-background ${scrollerVisible ? 'scroll-animate' : ''}`}>

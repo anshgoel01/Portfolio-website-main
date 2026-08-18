@@ -1,0 +1,71 @@
+<svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #ffffff; stroke: #6366f1; stroke-width: 2; rx: 12; }
+      .agentbox { fill: #eef2ff; stroke: #818cf8; stroke-width: 1.5; rx: 10; }
+      .label { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; fill: #1e1b4b; font-weight: 600; }
+      .sublabel { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #4338ca; }
+      .arrow { stroke: #6366f1; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 26px; fill: #312e81; font-weight: 800; }
+      .subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; fill: #6366f1; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="500" fill="#f5f5ff" />
+  <text x="40" y="45" class="title">Concord</text>
+  <text x="40" y="68" class="subtitle">Multi-Agent Research Platform — FastAPI · LangGraph · pgvector</text>
+
+  <!-- Services row -->
+  <rect x="40" y="100" width="170" height="70" class="box" />
+  <text x="60" y="130" class="label">Gateway</text>
+  <text x="60" y="150" class="sublabel">Auth (JWT), routing</text>
+
+  <rect x="260" y="100" width="170" height="70" class="box" />
+  <text x="280" y="130" class="label">Task Service</text>
+  <text x="280" y="150" class="sublabel">PostgreSQL job state</text>
+
+  <rect x="480" y="100" width="170" height="70" class="box" />
+  <text x="500" y="130" class="label">Orchestrator</text>
+  <text x="500" y="150" class="sublabel">LangGraph + SSE stream</text>
+
+  <rect x="700" y="100" width="160" height="70" class="box" />
+  <text x="718" y="130" class="label">React UI</text>
+  <text x="718" y="150" class="sublabel">Query + live status</text>
+
+  <path class="arrow" d="M210 135 H260" />
+  <path class="arrow" d="M430 135 H480" />
+  <path class="arrow" d="M700 135 H650" />
+
+  <!-- Agent pipeline -->
+  <text x="40" y="220" class="label" font-size="16">LangGraph Agent Pipeline</text>
+
+  <rect x="40" y="240" width="140" height="60" class="agentbox" />
+  <text x="58" y="275" class="sublabel" font-size="13">Planner</text>
+
+  <rect x="220" y="240" width="140" height="60" class="agentbox" />
+  <text x="235" y="270" class="sublabel" font-size="13">Retriever</text>
+  <text x="235" y="286" class="sublabel">pgvector RAG</text>
+
+  <rect x="220" y="320" width="140" height="60" class="agentbox" />
+  <text x="235" y="350" class="sublabel" font-size="13">Web Search</text>
+  <text x="235" y="366" class="sublabel">Tavily API</text>
+
+  <rect x="400" y="280" width="140" height="60" class="agentbox" />
+  <text x="418" y="310" class="sublabel" font-size="13">Analyst</text>
+  <text x="418" y="326" class="sublabel">Confidence scoring</text>
+
+  <rect x="580" y="280" width="140" height="60" class="agentbox" />
+  <text x="600" y="315" class="sublabel" font-size="13">Writer</text>
+
+  <path class="arrow" d="M180 270 H220" />
+  <path class="arrow" d="M180 280 Q195 350 220 350" />
+  <path class="arrow" d="M360 270 Q380 300 400 305" />
+  <path class="arrow" d="M360 350 Q380 320 400 315" />
+  <path class="arrow" d="M540 310 H580" />
+
+  <text x="760" y="330" class="sublabel" font-size="12">Groq · Llama 3.3 70B</text>
+  <text x="760" y="348" class="sublabel" font-size="12">Docker Compose</text>
+</svg>
