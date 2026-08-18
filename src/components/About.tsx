@@ -117,23 +117,23 @@ const About = () => {
           >
             <h3 className="text-2xl font-bold mb-8">Skills & Expertise</h3>
 
-            <div className="space-y-8">
+            <div className="grid sm:grid-cols-2 gap-x-6 gap-y-6">
               {[
                 { heading: "Languages", items: skills.languages },
+                { heading: "AI & ML", items: skills.ai },
                 { heading: "Web Development", items: skills.webdev },
                 { heading: "Databases & Tools", items: skills.databases },
-                { heading: "AI & ML", items: skills.ai },
-                { heading: "Core CS", items: skills.coreCs },
-              ].map(({ heading, items }) => (
-                <div key={heading}>
-                  <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
+                { heading: "Core CS", items: skills.coreCs, full: true },
+              ].map(({ heading, items, full }) => (
+                <div key={heading} className={full ? "sm:col-span-2" : undefined}>
+                  <h4 className="text-sm uppercase tracking-wider text-muted-foreground mb-3">
                     {heading}
                   </h4>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5">
                     {items.map((skill) => (
                       <span
                         key={skill}
-                        className="px-4 py-2 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-sm font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
+                        className="px-3 py-1.5 bg-white dark:bg-gray-800 text-black dark:text-white rounded-full text-xs font-medium border border-border hover:border-black dark:hover:border-white transition-colors"
                       >
                         {skill}
                       </span>
