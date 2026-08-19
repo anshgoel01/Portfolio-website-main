@@ -475,7 +475,7 @@ const CodingDashboard = () => {
 
   return (
     <section
-      className="py-20 px-6 bg-gradient-to-b from-background to-muted/20"
+      className="py-20 px-6"
       id="coding-dashboard"
     >
       <div className="max-w-7xl mx-auto">

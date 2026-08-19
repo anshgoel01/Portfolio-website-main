@@ -45,7 +45,7 @@ const Index = () => {
   // Mobile: keep normal static scroll (no curtain / fixed footer)
   if (isMobile) {
     return (
-      <div className="bg-background min-h-screen">
+      <div className="grain-bg min-h-screen">
         <Navbar />
         <Hero />
         <TechStackScroller />
@@ -60,14 +60,14 @@ const Index = () => {
   }
 
   return (
-    <div className="bg-background min-h-screen">
-      
-      {/* MAIN CONTENT CURTAIN 
+    <div className="grain-bg min-h-screen">
+
+      {/* MAIN CONTENT CURTAIN
         Given z-10 and a solid background to cover the footer.
         The margin-bottom allows you to scroll past the content just enough to reveal the footer.
       */}
-      <main 
-        className="relative z-10 bg-background shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-b-[2.5rem] sm:rounded-b-[3rem] overflow-hidden"
+      <main
+        className="relative z-10 grain-bg shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-b-[2.5rem] sm:rounded-b-[3rem] overflow-hidden"
         style={{ marginBottom: footerHeight }}
       >
         <Navbar />
