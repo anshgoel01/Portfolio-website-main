@@ -3,7 +3,7 @@
   "easySolved": 98,
   "mediumSolved": 153,
   "hardSolved": 31,
-  "rank": 3359,
+  "rank": 3370,
   "streak": 0,
   "rating": 1885,
   "maxStreak": 55,
@@ -1514,8 +1514,12 @@
     },
     {
       "date": "2026-08-24",
+      "count": 7
+    },
+    {
+      "date": "2026-08-25",
       "count": 0
     }
   ],
-  "lastUpdated": "2026-08-24T03:11:15.462Z"
+  "lastUpdated": "2026-08-25T03:06:45.441Z"
 }
