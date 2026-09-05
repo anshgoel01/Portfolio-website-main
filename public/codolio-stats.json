@@ -1,13 +1,13 @@
 {
-  "totalSolved": 327,
-  "easySolved": 112,
-  "mediumSolved": 172,
-  "hardSolved": 42,
-  "rank": 3153,
-  "streak": 0,
+  "totalSolved": 336,
+  "easySolved": 114,
+  "mediumSolved": 178,
+  "hardSolved": 43,
+  "rank": 2708,
+  "streak": 3,
   "rating": 1885,
   "maxStreak": 55,
-  "totalActiveDays": 159,
+  "totalActiveDays": 166,
   "ratingHistory": [
     {
       "date": "Nov 22",
@@ -1530,8 +1530,12 @@
     },
     {
       "date": "2026-09-04",
+      "count": 3
+    },
+    {
+      "date": "2026-09-05",
       "count": 0
     }
   ],
-  "lastUpdated": "2026-09-04T07:12:55.079Z"
+  "lastUpdated": "2026-09-05T06:53:04.454Z"
 }
