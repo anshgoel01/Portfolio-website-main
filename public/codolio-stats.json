@@ -3,7 +3,7 @@
   "easySolved": 126,
   "mediumSolved": 204,
   "hardSolved": 55,
-  "rank": 2140,
+  "rank": 2145,
   "streak": 0,
   "rating": 1885,
   "maxStreak": 55,
@@ -52,34 +52,6 @@
     "icon": "https://assets.leetcode.com/static_assets/others/Top_SQL_50.png"
   },
   "githubContributions": [
-    {
-      "date": "2025-10-26",
-      "count": 0
-    },
-    {
-      "date": "2025-10-27",
-      "count": 0
-    },
-    {
-      "date": "2025-10-28",
-      "count": 0
-    },
-    {
-      "date": "2025-10-29",
-      "count": 0
-    },
-    {
-      "date": "2025-10-30",
-      "count": 0
-    },
-    {
-      "date": "2025-10-31",
-      "count": 0
-    },
-    {
-      "date": "2025-11-01",
-      "count": 0
-    },
     {
       "date": "2025-11-02",
       "count": 0
@@ -1535,7 +1507,11 @@
     {
       "date": "2026-10-31",
       "count": 0
+    },
+    {
+      "date": "2026-11-01",
+      "count": 0
     }
   ],
-  "lastUpdated": "2026-10-31T08:17:44.641Z"
+  "lastUpdated": "2026-11-01T09:00:35.562Z"
 }
